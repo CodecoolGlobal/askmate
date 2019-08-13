@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ question["title"] }}</title>
+</head>
+<body>
+
+{{ question["message"] }}
+<br>
+Views:
+{{ question["view_number"] }}
+<br>
+Votes:
+{{ question["vote_number"] }}
+<br>
+<table>
+    {% for answer in answers %}
+    <tr>
+        <td>
+            {{ answer["message"] }}
+        </td>
+        <td>
+            Votes:
+            {{ answer["vote_number"] }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

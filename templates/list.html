@@ -4,6 +4,17 @@
         <title>Ask Mate</title>
     </head>
     <body>
-        HEllo hello sziasztok
+    <a href={{ url_for("route_add_question") }}>Add new question</a>
+        <table>
+            {% for q in questions %}
+
+            <tr>
+                <td>
+                    <a href={{ url_for('route_question', question_id=q.id)}}> {{q["title"]}} </a>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
     </body>
 </html>
