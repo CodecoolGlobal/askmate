@@ -21,6 +21,9 @@ Votes:
 <br>Asked:
 {{ question["submission_time"] }}
 <br>
+<a href="{{ url_for("route_question_vote_up", question_id = question["id"]) }}">Vote UP</a>
+<a href="{{ url_for("route_question_vote_down", question_id = question["id"]) }}">Vote Down</a>
+<br>
 <a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
 <br>
 <a href="/list">Back to Home</a>
@@ -29,6 +32,9 @@ Votes:
     <tr>
         <td>
             {{ answer["message"] }}
+            <br>
+                <a href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">Vote UP</a>
+                <a href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">Vote Down</a>
             <br>
             {% if question["image"] %}
             <br>

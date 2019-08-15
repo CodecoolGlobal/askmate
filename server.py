@@ -14,7 +14,7 @@ def route_list():
         if util.isitUpdate(data_handler.get_all_data(data_handler.QUESTION_PATH),request.form.get("id")):
             for key in request.form:
                 new_q_dict[key] = request.form.get(key)
-            data_handler.edit_question(data_handler.get_all_data(data_handler.QUESTION_PATH),new_q_dict)
+            data_handler.edit_question(data_handler.get_all_data(data_handler.QUESTION_PATH),new_q_dict, data_handler.QUESTION_PATH)
 
         else:
             for key in request.form:
@@ -92,6 +92,36 @@ def route_edit(question_id):
     question = data_handler.get_data_by_id(question_id,data_handler.QUESTION_PATH,"id")
     return render_template("add-question.html",question = question)
 
+@app.route("/question/<question_id>/vote-up", methods=["GET","POST"])
+def route_question_vote_up(question_id):
+    question = data_handler.get_data_by_id(question_id, data_handler.QUESTION_PATH, "id")
+    question["vote_number"] = int(question["vote_number"]) + 1
+    data_handler.edit_question(data_handler.get_all_data(data_handler.QUESTION_PATH), question, data_handler.QUESTION_PATH)
+    return redirect(url_for("route_question", question_id=question_id))
+
+@app.route("/question/<question_id>/vote-down", methods=["GET","POST"])
+def route_question_vote_down(question_id):
+    question = data_handler.get_data_by_id(question_id, data_handler.QUESTION_PATH, "id")
+    question["vote_number"] = int(question["vote_number"]) - 1
+    data_handler.edit_question(data_handler.get_all_data(data_handler.QUESTION_PATH), question, data_handler.QUESTION_PATH)
+    return redirect(url_for("route_question", question_id=question_id))
+
+@app.route("/answer/<answer_id>/vote-up", methods=["GET","POST"])
+def route_answer_vote_up(answer_id):
+    answer = data_handler.get_data_by_id(answer_id, data_handler.ANSWER_PATH, "id")
+    question_id = answer["question_id"]
+    answer["vote_number"] = int(answer["vote_number"]) + 1
+    data_handler.edit_question(data_handler.get_all_data(data_handler.ANSWER_PATH), answer, data_handler.ANSWER_PATH)
+    return redirect(url_for("route_question", question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/vote-down", methods=["GET","POST"])
+def route_answer_vote_down(answer_id):
+    answer = data_handler.get_data_by_id(answer_id, data_handler.ANSWER_PATH, "id")
+    question_id = answer["question_id"]
+    answer["vote_number"] = int(answer["vote_number"]) - 1
+    data_handler.edit_question(data_handler.get_all_data(data_handler.ANSWER_PATH), answer, data_handler.ANSWER_PATH)
+    return redirect(url_for("route_question", question_id=question_id))
 
 if __name__ == '__main__':
     app.run(

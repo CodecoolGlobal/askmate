@@ -39,8 +39,6 @@ def get_answers_by_qid(qid):
         return answers
 
 def write_to_file(data,path,mode):
-    #TODO: data legyen lista és ennek tartalmát írja a fileba
-
     fieldnames=[key for key in data[0]]
     with open(path,mode) as f:
         writer = csv.DictWriter(f,fieldnames,delimiter = ',',restval="")
@@ -60,10 +58,10 @@ def delete_data_by_id(id,path,key):
     return data_to_remain
 
 
-def edit_question(all_qs, new_q):
+def edit_question(all_qs, new_q, path):
     for row in all_qs:
         if row["id"] == new_q["id"]:
             index = all_qs.index(row)
             all_qs.remove(row)
             all_qs.insert(index, new_q)
-    write_to_file(all_qs,QUESTION_PATH,"w")
+    write_to_file(all_qs,path,"w")
