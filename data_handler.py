@@ -16,15 +16,15 @@ def get_all_data(path):
             rows.append(row_dict)
         return rows
 
-def get_q_by_id(qid):
-    with open(QUESTION_PATH,"r") as f:
+def get_data_by_id(id,path,key):
+    with open(path,"r") as f:
         csv_reader = csv.DictReader(f, delimiter = ',',restval="")
-        question_dict = {}
+        data_dict = {}
         for row in csv_reader:
-            if row["id"] == qid:
+            if row[key] == id:
                 for header in row:
-                    question_dict[header] = row[header]
-        return question_dict
+                    data_dict[header] = row[header]
+        return data_dict
 
 def get_answers_by_qid(qid):
     answers = []
@@ -38,12 +38,16 @@ def get_answers_by_qid(qid):
                 answers.append(answer_dict)
         return answers
 
-def write_to_file(data,path):
+def write_to_file(data,path,mode):
     #TODO: data legyen lista és ennek tartalmát írja a fileba
-    fieldnames=[key for key in data]
-    with open(path,"a") as f:
+
+    fieldnames=[key for key in data[0]]
+    with open(path,mode) as f:
         writer = csv.DictWriter(f,fieldnames,delimiter = ',',restval="")
-        writer.writerow(data)
+        if mode == "w":
+            writer.writeheader()
+
+        writer.writerows(data)
 
 def delete_data_by_id(id,path,key):
     data_to_remain = []
@@ -55,3 +59,11 @@ def delete_data_by_id(id,path,key):
             data_to_remain.append(data)
     return data_to_remain
 
+
+def edit_question(all_qs, new_q):
+    for row in all_qs:
+        if row["id"] == new_q["id"]:
+            index = all_qs.index(row)
+            all_qs.remove(row)
+            all_qs.insert(index, new_q)
+    write_to_file(all_qs,QUESTION_PATH,"w")

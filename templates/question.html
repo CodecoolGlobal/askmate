@@ -7,6 +7,7 @@
 <body>
 <h1>{{ question["title"] }}</h1>
 {{ question["message"] }}
+<a href="{{ url_for("route_edit", question_id=question["id"]) }}">Edit Question</a>
 {% if question["image"] %}
 <br>
 <img src="{{question["image"]}}">
@@ -20,17 +21,27 @@ Votes:
 <br>Asked:
 {{ question["submission_time"] }}
 <br>
+<a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
+<br>
 <a href="/list">Back to Home</a>
 <table>
     {% for answer in answers %}
     <tr>
         <td>
             {{ answer["message"] }}
+            <br>
+            {% if question["image"] %}
+            <br>
+            <img src="{{answer["image"]}}">
+            {% endif %}
         </td>
         <td>
             Votes:
             {{ answer["vote_number"] }}
         </td>
+    <td>
+        <a href="{{ url_for("route_delete_answer",answer_id = answer["id"])}}">Delete Answer</a>
+    </td>
     </tr>
     {% endfor %}
 </table>

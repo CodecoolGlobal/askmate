@@ -6,13 +6,13 @@
 </head>
 <body>
 <form action="/list" method="POST">
-    <input name="id" hidden="hidden" value="{{ id }}">
-    <input name="submission_time" hidden="hidden">
-    <input name="view_number" hidden="hidden" value="0">
-    <input name="vote_number" hidden="hidden" value="1">
-    <input name=title placeholder="Title..." type="text" minlength="5" maxlength="50" required>
-    <br><textarea name=message placeholder="Your question..."  cols="60" rows="6" required></textarea>
-    <br><input name=image type="text" placeholder="Image link...">
+    <input name="id" hidden="hidden" value="{{ id if not question else question.id}}">
+    <input name="submission_time" hidden="hidden" value="{{ '0 ' if not question else question.submission_time }}">
+    <input name="view_number" hidden="hidden" value="{{ '0' if not question else question.view_number }}">
+    <input name="vote_number" hidden="hidden" value="{{ '1' if not question else question.vote_number }}">
+    <input name=title placeholder="Title..." type="text" minlength="5" maxlength="50" value="{{ question.title }}"required>
+    <br><textarea name=message placeholder="Your question..."  cols="60" rows="6" required>{{ question.message }}</textarea>
+    <br><input name=image type="text" placeholder="Image link..." value="{{ question.image }}">
     <br><button type="submit">Submit</button>
 </form>
 </body>
