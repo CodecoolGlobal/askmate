@@ -5,15 +5,22 @@
     <title>{{ question["title"] }}</title>
 </head>
 <body>
-
+<h1>{{ question["title"] }}</h1>
 {{ question["message"] }}
+{% if question["image"] %}
+<br>
+<img src="{{question["image"]}}">
+{% endif %}
 <br>
 Views:
 {{ question["view_number"] }}
 <br>
 Votes:
 {{ question["vote_number"] }}
+<br>Asked:
+{{ question["submission_time"] }}
 <br>
+<a href="/list">Back to Home</a>
 <table>
     {% for answer in answers %}
     <tr>
@@ -27,5 +34,15 @@ Votes:
     </tr>
     {% endfor %}
 </table>
+<form action="{{ url_for("route_new_answer", question_id=question['id']) }}" method="POST">
+    <input name="id" hidden="hidden" value="{{ id }}" >
+    <input name="submission_time" hidden="hidden">
+    <input name="vote_number" hidden="hidden" value="1">
+    <input name="question_id" hidden="hidden" value="{{ question["id"] }}">
+    <textarea name="message" cols="60" rows="6" minlength="22" required></textarea>
+    <br><input type="text" name="image" placeholder="image url...">
+    <br><button type="submit">Add Answer</button>
+</form>
+
 </body>
 </html>

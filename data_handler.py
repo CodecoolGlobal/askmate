@@ -2,6 +2,8 @@ import csv
 
 ANSWER_PATH = "data/answer.csv"
 QUESTION_PATH = "data/question.csv"
+SEARCH_OPTIONS = ["Date", "Vote", "View", "Title"]
+ORDER_OPTIONS = ["Ascending", "Descending"]
 
 def get_all_data(path):
     rows = []
@@ -35,3 +37,21 @@ def get_answers_by_qid(qid):
                     answer_dict[header] = answer[header]
                 answers.append(answer_dict)
         return answers
+
+def write_to_file(data,path):
+    #TODO: data legyen lista és ennek tartalmát írja a fileba
+    fieldnames=[key for key in data]
+    with open(path,"a") as f:
+        writer = csv.DictWriter(f,fieldnames,delimiter = ',',restval="")
+        writer.writerow(data)
+
+def delete_data_by_id(id,path,key):
+    data_to_remain = []
+    all_data = get_all_data(path)
+    for data in all_data:
+        if data[key] == id:
+            continue
+        else:
+            data_to_remain.append(data)
+    return data_to_remain
+

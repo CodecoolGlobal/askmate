@@ -6,9 +6,13 @@
 </head>
 <body>
 <form action="/list" method="POST">
-    <input placeholder="title" type="text" minlength="5" maxlength="50" required>
-    <br><textarea placeholder="new question"  cols="60" rows="6" required></textarea>
-
+    <input name="id" hidden="hidden" value="{{ id }}">
+    <input name="submission_time" hidden="hidden">
+    <input name="view_number" hidden="hidden" value="0">
+    <input name="vote_number" hidden="hidden" value="1">
+    <input name=title placeholder="Title..." type="text" minlength="5" maxlength="50" required>
+    <br><textarea name=message placeholder="Your question..."  cols="60" rows="6" required></textarea>
+    <br><input name=image type="text" placeholder="Image link...">
     <br><button type="submit">Submit</button>
 </form>
 </body>
