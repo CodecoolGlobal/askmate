@@ -1,14 +1,16 @@
 import csv
+import time
 
 ANSWER_PATH = "data/answer.csv"
 QUESTION_PATH = "data/question.csv"
 SEARCH_OPTIONS = ["Date", "Vote", "View", "Title"]
 ORDER_OPTIONS = ["Ascending", "Descending"]
 
+
 def get_all_data(path):
     rows = []
-    with open(path,"r") as f:
-        csv_reader = csv.DictReader(f, delimiter = ',',restval="")
+    with open(path, "r") as f:
+        csv_reader = csv.DictReader(f, delimiter=',', restval="")
         for row in csv_reader:
             row_dict = {}
             for header in row:
@@ -16,9 +18,10 @@ def get_all_data(path):
             rows.append(row_dict)
         return rows
 
-def get_data_by_id(id,path,key):
-    with open(path,"r") as f:
-        csv_reader = csv.DictReader(f, delimiter = ',',restval="")
+
+def get_data_by_id(id, path, key):
+    with open(path, "r") as f:
+        csv_reader = csv.DictReader(f, delimiter=',', restval="")
         data_dict = {}
         for row in csv_reader:
             if row[key] == id:
@@ -26,10 +29,11 @@ def get_data_by_id(id,path,key):
                     data_dict[header] = row[header]
         return data_dict
 
+
 def get_answers_by_qid(qid):
     answers = []
-    with open(ANSWER_PATH,"r") as f:
-        csv_reader = csv.DictReader(f, delimiter = ',',restval="")
+    with open(ANSWER_PATH, "r") as f:
+        csv_reader = csv.DictReader(f, delimiter=',', restval="")
         for answer in csv_reader:
             if answer["question_id"] == qid:
                 answer_dict = {}
@@ -38,16 +42,18 @@ def get_answers_by_qid(qid):
                 answers.append(answer_dict)
         return answers
 
-def write_to_file(data,path,mode):
-    fieldnames=[key for key in data[0]]
-    with open(path,mode) as f:
-        writer = csv.DictWriter(f,fieldnames,delimiter = ',',restval="")
+
+def write_to_file(data, path, mode):
+    fieldnames = [key for key in data[0]]
+    with open(path, mode) as f:
+        writer = csv.DictWriter(f, fieldnames, delimiter=',', restval="")
         if mode == "w":
             writer.writeheader()
 
         writer.writerows(data)
 
-def delete_data_by_id(id,path,key):
+
+def delete_data_by_id(id, path, key):
     data_to_remain = []
     all_data = get_all_data(path)
     for data in all_data:
@@ -64,4 +70,33 @@ def edit_question(all_qs, new_q, path):
             index = all_qs.index(row)
             all_qs.remove(row)
             all_qs.insert(index, new_q)
-    write_to_file(all_qs,path,"w")
+    write_to_file(all_qs, path, "w")
+
+
+def add_new_question(request_form):
+    new_q_list = []
+    new_q_dict = {}
+    for key in request_form:
+        if key == "submission_time":
+            new_q_dict[key] = int(time.time())
+        else:
+            new_q_dict[key] = request_form.get(key)
+    new_q_list.append(new_q_dict)
+    write_to_file(new_q_list, QUESTION_PATH, "a")
+    return new_q_dict
+
+
+def get_next_id(all_data):
+    return int(all_data[-1]["id"]) + 1
+
+
+def add_new_answer(request_form):
+    new_a_dict = {}
+    new_a_list = []
+    for key in request_form:
+        if key == "submission_time":
+            new_a_dict[key] = int(time.time())
+        else:
+            new_a_dict[key] = request_form.get(key)
+    new_a_list.append(new_a_dict)
+    write_to_file(new_a_list, ANSWER_PATH, "a")

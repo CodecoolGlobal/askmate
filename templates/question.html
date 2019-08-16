@@ -3,63 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ question["title"] }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        a:visited {
+            color: black;
+        }
+
+        a:hover {
+            color: #b5b5b5;
+        }
+
+        .grey {
+
+            color: grey;
+        }
+
+        .container {
+            position: relative;
+            top: 30%;
+            margin-left: 70%;
+        }
+
+        .message {
+            margin: auto 10%;
+
+        }
+
+        .answer {
+
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
 <h1>{{ question["title"] }}</h1>
-{{ question["message"] }}
-<a href="{{ url_for("route_edit", question_id=question["id"]) }}">Edit Question</a>
+<div class="message">{{ question["message"] }}</div>
+
+<div class="grey"><br>Asked:
+    {{ question["submission_time"] }}</div>
+
+<div class="container">
+    <br><a href="{{ url_for("route_edit", question_id=question["id"]) }}">Edit Question</a>
+    <a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
+</div>
+
+
 {% if question["image"] %}
-<br>
-<img src="{{question["image"]}}">
+    <br>
+    <img width="225" height="400" src="{{ question["image"] }}">
 {% endif %}
-<br>
-Views:
-{{ question["view_number"] }}
-<br>
+<br/>
 Votes:
 {{ question["vote_number"] }}
-<br>Asked:
-{{ question["submission_time"] }}
-<br>
-<a href="{{ url_for("route_question_vote_up", question_id = question["id"]) }}">Vote UP</a>
-<a href="{{ url_for("route_question_vote_down", question_id = question["id"]) }}">Vote Down</a>
-<br>
-<a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
-<br>
-<a href="/list">Back to Home</a>
-<table>
-    {% for answer in answers %}
-    <tr>
-        <td>
-            {{ answer["message"] }}
-            <br>
-                <a href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">Vote UP</a>
-                <a href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">Vote Down</a>
-            <br>
-            {% if question["image"] %}
-            <br>
-            <img src="{{answer["image"]}}">
-            {% endif %}
-        </td>
-        <td>
-            Votes:
-            {{ answer["vote_number"] }}
-        </td>
-    <td>
-        <a href="{{ url_for("route_delete_answer",answer_id = answer["id"])}}">Delete Answer</a>
-    </td>
-    </tr>
-    {% endfor %}
-</table>
-<form action="{{ url_for("route_new_answer", question_id=question['id']) }}" method="POST">
-    <input name="id" hidden="hidden" value="{{ id }}" >
-    <input name="submission_time" hidden="hidden">
-    <input name="vote_number" hidden="hidden" value="1">
-    <input name="question_id" hidden="hidden" value="{{ question["id"] }}">
-    <textarea name="message" cols="60" rows="6" minlength="22" required></textarea>
-    <br><input type="text" name="image" placeholder="image url...">
-    <br><button type="submit">Add Answer</button>
-</form>
+Views:
+{{ question["view_number"] }}
 
+
+<br>
+<a href="{{ url_for("route_question_vote_up", question_id = question["id"]) }}">▲</a>
+<a href="{{ url_for("route_question_vote_down", question_id = question["id"]) }}">▼</a>
+<br>
+
+<a href="/list">Back</a>
+<div class="answer">
+    <table>
+        {% for answer in answers %}
+            <tr>
+                <td>
+                    {{ answer["message"] }}
+                    <br>
+                    <a href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">▲</a>
+                    <a href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">▼</a>
+                    <br>
+                    {% if question["image"] %}
+                        <br>
+                        <img src="{{ answer["image"] }}"/>
+                    {% endif %}
+                </td>
+                <td>
+                    Votes:
+                    {{ answer["vote_number"] }}
+                </td>
+                <td>
+                    <a style="text-decoration: none"
+                       href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}">Delete Answer</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <form action="{{ url_for("route_new_answer", question_id=question['id']) }}" method="POST" autocomplete="off">
+        <input name="id" hidden="hidden" value="{{ id }}">
+        <input name="submission_time" hidden="hidden">
+        <input name="vote_number" hidden="hidden" value="1">
+        <input name="question_id" hidden="hidden" value="{{ question["id"] }}">
+        <textarea name="message" placeholder="Answer the question pls..." cols="60" rows="6" minlength="5"
+                  required></textarea>
+        <br><input type="text" name="image" placeholder="image url...">
+        <br>
+        <button type="submit">Add Answer</button>
+    </form>
+</div>
 </body>
 </html>

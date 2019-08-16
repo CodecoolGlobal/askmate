@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Ask Mate</title>
-        <link rel="stylesheet" type="text/css" href="static/styles.css">
-    </head>
-    <body>
-    <a href={{ url_for("route_add_question") }}>Add new question</a>
-    <form action="{{url_for ('route_list')}}" method="GET">
+<head>
+    <title>Ask Mate</title>
+    <link href="{{ url_for("static",filename="style.css") }}" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+
+<a class="button" href={{ url_for("route_add_question") }}>Add new question</a>
+<div class="container">
+    <form action="{{ url_for ('route_list') }}" method="GET">
         <select name="ordered_by">
             {% for s_option in s_options %}
-                <option value="{{ s_option }} {{"selected" if selected_s_option==s_option }}">{{ s_option }}</option>
+                <option value="{{ s_option }} {{ "selected" if selected_s_option==s_option }}">{{ s_option }}</option>
             {% endfor %}
         </select>
 
         <select name="order_direction">
             {% for o_option in o_options %}
-                <option value="{{ o_option }}" {{"selected" if selected_o_option==o_option }}>{{ o_option }}</option>
+                <option value="{{ o_option }}" {{ "selected" if selected_o_option==o_option }}>{{ o_option }}</option>
             {% endfor %}
         </select>
-    <button type="submit">Search</button>
+        <button type="submit">Sort</button>
     </form>
+</div>
+<table>
+    <th>Views</th>
+    <th>Votes</th>
+    {% for q in questions %}
 
-        <table>
-            <th>View</th>
-            <th>Vote</th>
-            {% for q in questions %}
+        <tr>
 
-            <tr>
+            <td align="center">
+                {{ q["view_number"] }}
 
-                <td>
-                    {{ q["view_number"] }}
+            </td>
+            <td align="center">
+                {{ q["vote_number"] }}
+            </td>
+            <td>
+                <a href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a>
+                <br>
+                <div class="grey">{{ q["submission_time"] }}</div>
 
-                </td>
-                <td>
-                    {{ q["vote_number"] }}
-                </td>
-                <td>
-                    <a href={{ url_for('route_question', question_id=q.id)}}> {{q["title"]}} </a>
-                    <br>{{ q["submission_time"] }}
-
-                </td>
+            </td>
 
 
-            </tr>
-            {% endfor %}
-        </table>
-    </body>
+        </tr>
+    {% endfor %}
+</table>
+</body>
 </html>

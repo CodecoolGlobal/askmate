@@ -1,7 +1,9 @@
 import data_handler
 
 def dict_converter(ordereddict):
-    """ Converts ordered dict into regular dict"""
+    """ Converts ordered dict into regular dict
+    :rtype: anyád
+    """
     dict = {}
     for key in ordereddict:
         dict[key] = ordereddict[key]

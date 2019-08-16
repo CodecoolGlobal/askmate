@@ -1,0 +1,59 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:visited {
+    color: black;
+}
+
+.grey {
+    color: grey;
+}
+
+.button {
+    position: relative;
+    top: 35px;
+    right: 15%;
+    color: white;
+    padding: 6px 11px;
+    background-color: white;
+
+    border-radius: 6px;
+    border: black 2px solid;
+
+    margin-top: 10px;
+    margin-left: 30%;
+}
+
+.button:hover {
+    background-color: #f1f1f1;
+}
+
+.container {
+    padding: 1em;
+    position: relative;
+    left: 70%;
+}
+
+td {
+    border-bottom: black 1px solid;
+}
+
+table {
+    width: 70%;
+    margin: auto;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+}
