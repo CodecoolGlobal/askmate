@@ -11,7 +11,6 @@ ANSWER_PATH = data_handler.ANSWER_PATH
 @app.route('/list', methods=["GET", "POST"])
 def route_list():
     if request.method == "POST":
-
         new_q_dict = {}
         if util.isitUpdate(data_handler.get_all_data(QUESTION_PATH), request.form.get("id")):
             for key in request.form:
@@ -22,14 +21,32 @@ def route_list():
         return redirect(url_for("route_question", question_id=new_q_dict["id"]))
 
     else:
-        s_options = data_handler.SEARCH_OPTIONS
-        o_options = data_handler.ORDER_OPTIONS
+        search_options = data_handler.SEARCH_OPTIONS
+        order_options = data_handler.ORDER_OPTIONS
         questions = data_handler.get_all_data(QUESTION_PATH)
-        sorted_questions = sorted(questions, key=lambda question: question["submission_time"], reverse=True)
+        selected_o_option = request.args.get("order_direction")#ezt megtudja tartani
+        selected_s_option = request.args.get("ordered_by")#ezt nem tudja valszeg a láthatatlan whitespace a string végén nem tudom biztosan
+        try:
+            
+            order_direction = util.OPTIONS[request.args.get("order_direction")]
+            print(order_direction)
+            print(request.args.get("ordered_by"))
+            ordered_by = util.OPTIONS[request.args.get("ordered_by")]
+            print(ordered_by)
+        except KeyError:
+            ordered_by = "submission_time"
+            order_direction = True
+
+        for question in questions:
+            question["vote_number"] = int(question["vote_number"])
+            question["view_number"] = int(question["view_number"])#itt lehet valami intes baja van
+            question["title"] = question["title"].lower() #a nagybetűk miatt nem tudja sortolni
+
+        sorted_questions = sorted(questions, key=lambda question: question[ordered_by], reverse=order_direction)
         for question in questions:
             question["submission_time"] = time.ctime(int(question["submission_time"]))
-        return render_template("list.html", questions=sorted_questions, s_options=s_options, o_options=o_options)
-
+        print(order_direction,ordered_by)
+        return render_template("list.html", questions=sorted_questions, s_options=search_options, o_options=order_options, selected_s_option=selected_s_option,selected_o_option=selected_o_option)
 
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def route_question(question_id):

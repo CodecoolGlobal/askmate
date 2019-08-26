@@ -9,6 +9,16 @@ def dict_converter(ordereddict):
         dict[key] = ordereddict[key]
     return dict
 
+
+OPTIONS = {
+    "View": "view_number",
+    "Vote": "vote_number",
+    "Title": "title",
+    "Date": "submission_time",
+    "Descending": True,
+    "Ascending": False,
+}
+
 def option_converter(option):
     if option == "View ":
         return "view_number"
