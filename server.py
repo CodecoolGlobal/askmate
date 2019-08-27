@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def route_last_five_questions():
     sorted_questions = data_handler.get_latest_five_questions()
-    return render_template("index.html", questions=sorted_questions)
+    return render_template(url_for("index.html", questions=sorted_questions))
 
 
 @app.route('/list', methods=["GET", "POST"])
