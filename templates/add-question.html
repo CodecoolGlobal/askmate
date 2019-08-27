@@ -5,7 +5,13 @@
     <title>Add New Question</title>
 </head>
 <body>
-<form action="/list" method="POST" autocomplete="off">
+
+{% if question %}
+<form action="/question/<question_id>/edit" method="POST" autocomplete="off">
+{% else %}
+<form action="/add-question" method="POST" autocomplete="off">
+{% endif %}
+
     <input name="id" hidden="hidden" value="{{ id if not question else question.id}}">
     <input name="submission_time" hidden="hidden" value="{{ '0 ' if not question else question.submission_time }}">
     <input name="view_number" hidden="hidden" value="{{ '0' if not question else question.view_number }}">
