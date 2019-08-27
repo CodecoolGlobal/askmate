@@ -36,7 +36,7 @@ def add_new_row_to_table(cursor,data,table):
     data["message"] = f"""'{data["message"]}'"""
     data["image"] = f"""'{data["image"]}'"""
 
-    if table == "questions":
+    if table == "question":
         data["title"] = f"""'{data["title"]}'"""
 
     columns=[column for column in data]
@@ -97,3 +97,11 @@ def get_next_id(cursor,table):
     last_id = cursor.fetchone()
     next_id = last_id["id"]+1
     return next_id
+
+
+@connection.connection_handler
+def get_latest_five_questions(cursor):
+    query = f'SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;'
+    cursor.execute(query)
+    data = cursor.fetchall()
+    return data
