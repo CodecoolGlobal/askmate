@@ -1,5 +1,5 @@
 import data_handler
-
+import connection
 def dict_converter(ordereddict):
     """ Converts ordered dict into regular dict
     :rtype: anyád
@@ -19,6 +19,7 @@ OPTIONS = {
     "Ascending": False,
 }
 
+
 def option_converter(option):
     if option == "View ":
         return "view_number"
@@ -37,8 +38,9 @@ def option_converter(option):
     elif option == "Ascending":
         return False
 
-def isitUpdate(all_qs, id):
-    for q in all_qs:
-        if id == q["id"]:
-            return True
+
+@connection.connection_handler
+def isitUpdate(cursor,table,id):
+    if data_handler.get_data_by_id(cursor,id,table):
+        return True
     return False

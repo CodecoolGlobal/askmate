@@ -93,10 +93,10 @@ Views:
                     Votes:
                     {{ answer["vote_number"] }}
                 </td>
-                <td>
                     <a style="text-decoration: none"
                        href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}">Delete Answer</a>
                 </td>
+                <td>
             </tr>
         {% endfor %}
     </table>
