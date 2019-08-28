@@ -114,7 +114,7 @@ def search(cursor,search_phrase):
 
 @connection.connection_handler
 def get_latest_five_questions(cursor):
-    query = f'SELECT * FROM question ORDER BY submission_time DESC LIMIT 5;'
+    query = f'SELECT * FROM question ORDER BY submission_time DESC LIMIT 5'
     cursor.execute(query)
     data = cursor.fetchall()
     return data

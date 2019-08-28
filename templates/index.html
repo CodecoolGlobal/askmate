@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AskMate | Front Page</title>
+    <title>AskMate</title>
     <link href="{{ url_for("static",filename="style.css") }}" type="text/css" rel="stylesheet"/>
 </head>
 <body>
@@ -12,12 +12,9 @@
     <th>Views</th>
     <th>Votes</th>
     {% for q in questions %}
-
     <tr>
-
         <td align="center">
             {{ q["view_number"] }}
-
         </td>
         <td align="center">
             {{ q["vote_number"] }}
