@@ -4,7 +4,12 @@ import util
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
+def route_last_five_questions():
+    sorted_questions = data_handler.get_latest_five_questions()
+    return render_template(url_for("index.html", questions=sorted_questions))
+
+
 @app.route('/list', methods=["GET", "POST"])
 def route_list():
     search_options = data_handler.SEARCH_OPTIONS
@@ -16,8 +21,8 @@ def route_list():
         order_direction = util.OPTIONS[request.args.get("order_direction")]
         ordered_by = util.OPTIONS[request.args.get("ordered_by")]
     except KeyError:
-        ordered_by = "submission_time"
         order_direction = "DESC"
+        ordered_by = "submission_time"
 
     sorted_questions = data_handler.sort_questions(ordered_by,order_direction)
     return render_template("list.html", questions=sorted_questions, s_options=search_options, o_options=order_options, selected_s_option=selected_s_option,selected_o_option=selected_o_option)
