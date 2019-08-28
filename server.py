@@ -30,15 +30,19 @@ def route_list():
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def route_question(question_id):
     question = data_handler.get_data_by_id(question_id,'question')[0]
-    if request.method == "GET":
+    if request.method == "GET" and not request.args.get("answer_id"):
 
         question["view_number"] = int(question["view_number"]) + 1
         data_handler.edit_row('question',question)
 
-    id = data_handler.get_next_id("answer")
+    next_answer_id = data_handler.get_next_id("answer")
+    next_comment_id = data_handler.get_next_id("comment")
 
+    answer_id_to_comment = request.args.get("answer_id")
+    comment_to_question = request.args.get("comment_to_question")
     answers = data_handler.get_answers_by_qid(question_id)
-    return render_template("question.html", question=question, answers=answers, id=str(id))
+    comments = data_handler.get_comments_by_question(question)
+    return render_template("question.html", question=question, answers=answers, next_answer_id=str(next_answer_id),comments=comments,answer_id=answer_id_to_comment,next_comment_id=next_comment_id,comment_to_question=comment_to_question)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -129,6 +133,18 @@ def route_search():
     search_results = data_handler.search(search_phrase)
     return render_template('list.html',questions=search_results,)
 
+@app.route("/answer/<answer_id>/new-comment", methods=["GET","POST"])
+def route_new_answer_comment(answer_id):
+    if request.method == "POST":
+        data_handler.add_new_row_to_table(request.form, "comment")
+        question_id = data_handler.get_data_by_id(answer_id,"answer")[0]["question_id"]
+        return redirect(url_for('route_question', question_id=question_id))
+
+@app.route("/question/<question_id>/new-comment", methods=["GET","POST"])
+def route_new_question_comment(question_id):
+    if request.method == "POST":
+        data_handler.add_new_row_to_table(request.form, "comment")
+        return redirect(url_for('route_question', question_id=question_id))
 
 if __name__ == '__main__':
     app.run(

@@ -22,7 +22,7 @@
         <td>
             <a href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a>
             <br>
-            <div class="grey">{{ q["submission_time"] }}</div>
+            <div class="submission_time">{{ q["submission_time"] }}</div>
         </td>
     </tr>
     {% endfor %}

@@ -34,10 +34,12 @@ def add_new_row_to_table(cursor,data,table):
 
     data["submission_time"] = f"""'{data["submission_time"]}'"""
     data["message"] = f"""'{data["message"]}'"""
-    data["image"] = f"""'{data["image"]}'"""
 
-    if table == "question":
-        data["title"] = f"""'{data["title"]}'"""
+
+    if table == "question" or table == "answer":
+        data["image"] = f"""'{data["image"]}'"""
+        if table == "question":
+            data["title"] = f"""'{data["title"]}'"""
 
     columns=[column for column in data]
     values = [data[column] for column in columns]
@@ -86,7 +88,8 @@ def replace_values(data):
         print(data[column])
         print(type(data[column]))
         data[column]=data[column].replace("'","''")
-    data["image"] = str(data["image"]).replace("", "")
+    if "image" in data:
+        data["image"] = str(data["image"]).replace("", "")
     return data
 
 
@@ -117,4 +120,21 @@ def get_latest_five_questions(cursor):
     query = f'SELECT * FROM question ORDER BY submission_time DESC LIMIT 5'
     cursor.execute(query)
     data = cursor.fetchall()
+    return data
+
+
+@connection.connection_handler
+def get_comments_by_question(cursor,question):
+    answer_ids = [answer['id'] for answer in get_answers_by_qid(question['id'])]
+    print(f"ANSWER IDS {answer_ids}")
+    answer_ids_list = [f'answer_id={answer_id}' for answer_id in answer_ids]
+    print(f"answer_list {answer_ids_list}")
+    columns = """id, question_id, answer_id, message, submission_time, CASE WHEN edited_count IS NULL THEN 0 ELSE edited_count END"""
+    query= f"""SELECT {columns} FROM comment WHERE question_id = {question["id"]}"""
+    if answer_ids:
+        query += f" OR {' OR '.join((answer_ids_list))}"
+    print(query)
+    cursor.execute(query)
+    data = cursor.fetchall()
+    print(data)
     return data
