@@ -3,9 +3,6 @@ import data_handler
 import util
 
 app = Flask(__name__)
-QUESTION_PATH = data_handler.QUESTION_PATH
-ANSWER_PATH = data_handler.ANSWER_PATH
-
 
 @app.route("/")
 @app.route('/list', methods=["GET", "POST"])
@@ -15,9 +12,12 @@ def route_list():
 
     selected_o_option = request.args.get("order_direction")
     selected_s_option = request.args.get("ordered_by")
-
-    order_direction = util.OPTIONS[request.args.get("order_direction")]
-    ordered_by = util.OPTIONS[request.args.get("ordered_by")]
+    try:
+        order_direction = util.OPTIONS[request.args.get("order_direction")]
+        ordered_by = util.OPTIONS[request.args.get("ordered_by")]
+    except KeyError:
+        ordered_by = "submission_time"
+        order_direction = "DESC"
 
     sorted_questions = data_handler.sort_questions(ordered_by,order_direction)
     return render_template("list.html", questions=sorted_questions, s_options=search_options, o_options=order_options, selected_s_option=selected_s_option,selected_o_option=selected_o_option)
@@ -25,7 +25,6 @@ def route_list():
 @app.route("/question/<question_id>", methods=["GET", "POST"])
 def route_question(question_id):
     question = data_handler.get_data_by_id(question_id,'question')[0]
-    print(question)
     if request.method == "GET":
 
         question["view_number"] = int(question["view_number"]) + 1
@@ -33,7 +32,6 @@ def route_question(question_id):
 
     id = data_handler.get_next_id("answer")
 
-    #question["submission_time"] = time.ctime(int(question["submission_time"]))
     answers = data_handler.get_answers_by_qid(question_id)
     return render_template("question.html", question=question, answers=answers, id=str(id))
 
@@ -119,6 +117,12 @@ def route_answer_vote_down(answer_id):
     data_handler.edit_row("question", question)
     data_handler.edit_row("answer", answer)
     return redirect(url_for("route_question", question_id=question_id))
+
+@app.route("/search",methods=["GET","POST"])
+def route_search():
+    search_phrase = request.args.get('q')
+    search_results = data_handler.search(search_phrase)
+    return render_template('list.html',questions=search_results,)
 
 
 if __name__ == '__main__':

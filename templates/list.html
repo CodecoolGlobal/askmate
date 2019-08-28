@@ -8,7 +8,11 @@
 
 <a class="button" href={{ url_for("route_add_question") }}>Add new question</a>
 <div class="container">
+    {% if searched %}
+    <form action="{{ url_for ('route_search') }}" method="GET">
+    {% else %}
     <form action="{{ url_for ('route_list') }}" method="GET">
+    {% endif %}
         <select name="ordered_by">
             {% for s_option in s_options %}
                 <option value="{{ s_option }}" {{ "selected" if selected_s_option==s_option }}>{{ s_option }}</option>
@@ -22,7 +26,12 @@
         </select>
         <button type="submit">Sort</button>
     </form>
+    <form action="{{ url_for('route_search') }}" method="GET">
+        <input type="text" name="q" placeholder="search..." required>
+        <button type="submit">Search</button>
+    </form>
 </div>
+
 <table>
     <th>Views</th>
     <th>Votes</th>

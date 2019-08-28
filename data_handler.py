@@ -36,7 +36,7 @@ def add_new_row_to_table(cursor,data,table):
     data["message"] = f"""'{data["message"]}'"""
     data["image"] = f"""'{data["image"]}'"""
 
-    if table == "questions":
+    if table == "question":
         data["title"] = f"""'{data["title"]}'"""
 
     columns=[column for column in data]
@@ -57,7 +57,7 @@ def delete_answers_by_qid(cursor,qid):
 
 def add_current_time(data):
     print(data)
-    data['submission_time'] = datetime.now()
+    data['submission_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return data
 
 @connection.connection_handler
@@ -97,3 +97,16 @@ def get_next_id(cursor,table):
     last_id = cursor.fetchone()
     next_id = last_id["id"]+1
     return next_id
+
+
+@connection.connection_handler
+def search(cursor,search_phrase):
+    query = f"""SELECT id FROM question WHERE message LIKE '%{search_phrase}%' OR title LIKE '%{search_phrase}%' UNION SELECT question_id FROM answer WHERE message LIKE '%{search_phrase}%'"""
+    cursor.execute(query)
+    ids = cursor.fetchall()
+    ids_list = [f'id={id["id"]}' for id in ids]
+
+    query = f"""SELECT * FROM question WHERE {' OR '.join((ids_list))}"""
+    cursor.execute(query)
+    results = cursor.fetchall()
+    return results
