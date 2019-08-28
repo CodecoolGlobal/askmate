@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AskMate | Front Page</title>
+    <link href="{{ url_for("static",filename="style.css") }}" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<a class="button" href={{ url_for("route_list") }}>List All Questions</a>
+<div class="container"></div>
+<table>
+    <th>Views</th>
+    <th>Votes</th>
+    {% for q in questions %}
+
+    <tr>
+
+        <td align="center">
+            {{ q["view_number"] }}
+
+        </td>
+        <td align="center">
+            {{ q["vote_number"] }}
+        </td>
+        <td>
+            <a href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a>
+            <br>
+            <div class="grey">{{ q["submission_time"] }}</div>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
