@@ -3,47 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ question["title"] }}</title>
-    <style>
-        body {
-            font-family: sans-serif;
-        }
+    <link href="{{ url_for("static",filename="question.css") }}" type="text/css" rel="stylesheet"/>
 
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-
-        a:visited {
-            color: black;
-        }
-
-        a:hover {
-            color: #b5b5b5;
-        }
-
-        .submission_time {
-
-            color: grey;
-            font-size: 11px;
-        }
-
-        .container {
-            position: relative;
-            top: 30%;
-            margin-left: 70%;
-        }
-
-        .message {
-            margin: auto 10%;
-
-        }
-
-        .answer {
-
-            margin-top: 50px;
-        }
-    </style>
 </head>
 <body>
 <h1>{{ question["title"] }}</h1>
@@ -58,8 +19,7 @@
     <a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
 </div>
 
-<div>
-
+<div class="comment">
     <table>
         {% for comment in comments %}
             {% if comment['question_id']|int == question['id']|int %}
@@ -67,13 +27,25 @@
                     <td>
                         {{ comment["message"] }} Edited {{ comment['edited_count'] }} times
                         <br>
-                        <div class="submission_time">{{ comment["submission_time"] }}</div>
+                        <div class="submission_time">Commented: {{ comment["submission_time"] }}</div>
                     </td>
                     <td>
-                        Delete Comment
+                        <a href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
+                            Comment</a>
                     </td>
                     <td>
-                        Edit Comment
+                        <form action="{{ url_for('route_question',question_id=question["id"]) }}"
+                              method="post">
+                            <input name="id" type="hidden" value="{{ comment.id }}">
+                            <input name="question_id" type="hidden" value="{{ comment.question_id }}">
+                            <input name="answer_id" type="hidden" value="{{ comment.answer_id }}">
+                            <input name="message" type="hidden" value="{{ comment.message }}">
+                            <input name="submission_time" type="hidden" value="{{ comment.submission_time }}">
+                            <input name="edited_count" type="hidden" value="{{ comment.edited_count }}">
+                            <button class="not_button" type="submit">
+                                Edit Comment
+                            </button>
+                        </form>
                     </td>
 
                 </tr>
@@ -84,28 +56,35 @@
     </table>
 </div>
 
-{% if comment_to_question %}
-<form action='{{ url_for("route_new_question_comment",question_id = question['id']) }}' method="POST"
-      autocomplete="off">
 
-    <input name='id' type="hidden" value="{{ next_comment_id }}">
-    <input name='question_id' type="hidden" value="{{ question.id }}">
-    <input name="answer_id" type="hidden" value="NULL">
-    <textarea name="message" cols="30" rows="1" placeholder="Here comes your comment..."
-              required
-              minlength="3"></textarea>
-    <input name="submission_time" type="hidden">
-    <input name="edited_count" type="hidden" value="NULL">
+{% if comment_to_question and not comment_to_edit %}
+    {% if comment_to_edit %}
+        <form action='{{ url_for("route_edit_comment",comment_id = comment_to_edit['id']) }}'
+              method="POST"
+              autocomplete="off">
+    {% else %}
+        <form action='{{ url_for("route_new_question_comment",question_id = question['id']) }}' method="POST"
+              autocomplete="off">
+    {% endif %}
 
-    <button type="submit">Post Comment</button>
+<input name='id' type="hidden" value="{{ next_comment_id if not comment_to_edit else comment_to_edit.id }}">
+<input name='question_id' type="hidden" value="{{ question.id }}">
+<input name="answer_id" type="hidden" value="NULL">
+<textarea name="message" cols="30" rows="1" placeholder="Here comes your comment..." required
+          minlength="3">{{ comment_to_edit.message }}</textarea>
+<input name="submission_time" type="hidden"
+       value="{{ '0 ' if not comment_to_edit else comment_to_edit.submission_time }}">
+<input name="edited_count" type="hidden" value="{{ 'NULL' if not comment_to_edit else comment_to_edit.edited_count }}">
+
+<button type="submit">{% if not comment_to_edit %}Post Comment {% else %} Edit {% endif %}</button>
+
 </form>
 {% endif %}
 
 <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
     <input name="comment_to_question" type="hidden" value="{{ question['id'] }}">
-    <button type="submit">
-        add
-        comment
+    <button class="not_button" type="submit">
+        Add Comment
     </button>
 </form>
 
@@ -113,7 +92,7 @@
 
 {% if question["image"] %}
     <br>
-    <img width="225" height="400" src="{{ question["image"] }}">
+    <img src="{{ question["image"] }}">
 {% endif %}
 <br/>
 Votes:
@@ -138,83 +117,124 @@ Views:
                     <a href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">▲</a>
                     <a href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">▼</a>
                     <br>
-                    <div class="submission_time">{{ answer["submission_time"] }}</div>
-                    {% if question["image"] %}
+                    <div class="submission_time">Answered: {{ answer["submission_time"] }}</div>
+                    {% if answer["image"] %}
                         <br>
                         <img src="{{ answer["image"] }}"/>
                     {% endif %}
-                    <table>
-                        {% for comment in comments %}
-                            {% if comment['answer_id']|int == answer['id']|int %}
-                                <tr>
-                                    <td>
-                                        {{ comment["message"] }} Edited {{ comment['edited_count'] }} times
-                                        <br>
-                                        <div class="submission_time">{{ comment["submission_time"] }}</div>
-                                    </td>
-                                    <td>
-                                        Delete Comment
-                                    </td>
-                                    <td>
-                                        Edit Comment
-                                    </td>
+                    <div class="comment">
+                        <table>
+                            {% for comment in comments %}
+                                {% if comment['answer_id']|int == answer['id']|int %}
+                                    <tr>
+                                        <td>
+                                            <div class="comment">{{ comment["message"] }}
+                                                Edited {{ comment['edited_count'] }} times
+                                            </div>
 
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                                            <br>
+                                            <div class="submission_time">
+                                                Commented: {{ comment["submission_time"] }}</div>
+                                        </td>
 
-                    {% if answer_id|int == answer.id|int %}
-                        <form action='{{ url_for("route_new_answer_comment",answer_id = answer['id']) }}' method="POST"
-                              autocomplete="off">
+                                        <td>
+                                            <a href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
+                                                Comment</a>
+                                        </td>
+                                        <td>
+                                            <form action="{{ url_for('route_question',question_id=question["id"]) }}"
+                                                  method="post">
+                                                <input name="id" type="hidden" value="{{ comment.id }}">
+                                                <input name="question_id" type="hidden"
+                                                       value="{{ comment.question_id }}">
+                                                <input name="answer_id" type="hidden" value="{{ comment.answer_id }}">
+                                                <input name="message" type="hidden" value="{{ comment.message }}">
+                                                <input name="submission_time" type="hidden"
+                                                       value="{{ comment.submission_time }}">
+                                                <input name="edited_count" type="hidden"
+                                                       value="{{ comment.edited_count }}">
+                                                <button class="not_button" type="submit">
+                                                    Edit Comment
+                                                </button>
+                                            </form>
 
-                            <input name='id' type="hidden" value="{{ next_comment_id }}">
-                            <input name='question_id' type="hidden" value="NULL">
-                            <input name="answer_id" type="hidden" value="{{ answer['id'] }}">
-                            <textarea name="message" cols="30" rows="1" placeholder="Here comes your comment..."
-                                      required
-                                      minlength="3"></textarea>
-                            <input name="submission_time" type="hidden">
-                            <input name="edited_count" type="hidden" value="NULL">
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
+                    {% if answer_id|int == answer.id|int or comment_to_edit and answer.id|int == comment_to_edit.answer_id|int %}
+                        {% if comment_to_edit %}
+                            <form action='{{ url_for("route_edit_comment",comment_id = comment_to_edit['id']) }}'
+                                  method="POST"
+                                  autocomplete="off">
+                        {% else %}
+                            <form action='{{ url_for("route_new_answer_comment",answer_id = answer['id']) }}'
+                                  method="POST"
+                                  autocomplete="off">
+                        {% endif %}
+                    <input name='id' type="hidden"
+                           value="{{ next_comment_id if not comment_to_edit else comment_to_edit.id }}">
+                    <input name='question_id' type="hidden" value="NULL">
+                    <input name="answer_id" type="hidden"
+                           value="{{ answer['id'] if not comment_to_edit else comment_to_edit.answer_id }}">
+                    <textarea name="message" cols="30" rows="1" placeholder="Here comes your comment..."
+                              required
+                              minlength="3">{{ comment_to_edit.message }}</textarea>
+                    <input name="submission_time" type="hidden"
+                           value="{{ '0 ' if not comment_to_edit else comment_to_edit.submission_time }}">
+                    <input name="edited_count" type="hidden"
+                           value="{{ 'NULL' if not comment_to_edit else comment_to_edit.edited_count }}">
 
-                            <button type="submit">Post Comment</button>
-                        </form>
+                    <button class="not_button" type="submit">{% if not comment_to_edit %}Post Comment {% else %}
+                        Edit {% endif %}</button>
+                    </form>
 
                     {% endif %}
                     <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
                         <input name="answer_id" type="hidden" value="{{ answer['id'] }}">
-                        <button type="submit">
-                            add
-                            comment
+                        <button class="not_button" type="submit">
+                            Add
+                            Comment
                         </button>
                     </form>
                 </td>
-                <td>
+                <td style="vertical-align: top">
                     Votes:
                     {{ answer["vote_number"] }}
                 </td>
-                <td>
-                    <a style="text-decoration: none"
-                       href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}">Delete Answer</a>
+                <td style="vertical-align: top">
+                    <a
+                            href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}">Delete Answer</a>
                 </td>
-
+                <td style="vertical-align: top">
+                    <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
+                        <input name="answer_to_edit" type="hidden" value="{{ answer.id }}">
+                        <button class="not_button" type="submit">
+                            Edit Answer
+                        </button>
+                    </form>
+                </td>
             </tr>
-
-
-
         {% endfor %}
     </table>
-
-    <form action="{{ url_for("route_new_answer", question_id=question['id']) }}" method="POST" autocomplete="off">
-        <input name="id" hidden="hidden" value="{{ next_answer_id }}">
-        <input name="submission_time" hidden="hidden">
-        <input name="vote_number" hidden="hidden" value="1">
-        <input name="question_id" hidden="hidden" value="{{ question["id"] }}">
-        <textarea name="message" placeholder="Answer the question pls..." cols="60" rows="6" minlength="5"
-                  required></textarea>
-        <br><input type="text" name="image" placeholder="image url...">
-        <br>
-        <button type="submit">Add Answer</button>
+    {% if answer_to_edit %}
+        <form action="{{ url_for("route_edit_answer",answer_id = answer_to_edit['id']) }}" method="POST"
+              autocomplete="off">
+    {% else %}
+        <form action="{{ url_for("route_new_answer", question_id=question['id']) }}" method="POST" autocomplete="off">
+    {% endif %}
+    <input name="id" hidden="hidden" value="{{ next_answer_id if not answer_to_edit else answer_to_edit.id }}">
+    <input name="submission_time" hidden="hidden" value="{{ answer_to_edit.submission_time }}">
+    <input name="vote_number" hidden="hidden" value="{{ '1' if not answer_to_edit else answer_to_edit.vote_number }}">
+    <input name="question_id" hidden="hidden"
+           value="{{ question["id"] if not answer_to_edit else answer_to_edit.question_id }}">
+    <textarea name="message" placeholder="Answer the question pls..." cols="60" rows="6" minlength="5"
+              required>{{ answer_to_edit.message }}</textarea>
+    <br><input type="text" name="image" placeholder="image url..." value="{{ answer_to_edit.image }}">
+    <br>
+    <button class="not_button" type="submit">{% if not answer_to_edit %}Add Answer {% else %} Edit
+        Answer {% endif %}</button>
     </form>
 </div>
 </body>
