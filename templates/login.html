@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'Registration' if registration is defined else 'Login' }}</title>
+</head>
+<body>
+<h1> {{ 'Registration' if registration is defined else 'Login' }}</h1>
+
+<h6>{{ 'User name taken' if usernametaken is defined}}</h6>
+<h6>{{ 'Wrong Password' if wrongpassword is defined}}</h6>
+<h6>{{ 'User name not found' if usernotfound is defined}}</h6>
+
+
+<form action="{{ url_for('route_registration') if registration is defined else url_for('route_login') }}" method="post">
+    <label for="username"><h4>User name:</h4></label>
+    <input id="username" name="username" type="text" minlength="5" maxlength="16" autocomplete="off" required>
+    <label for="password"><h4>Password:</h4></label>
+    <input id="password" name="password" type="password" minlength="5" maxlength="24" required>
+    <input type="submit" value="{{ 'Registration' if registration is defined else 'Login' }}">
+</form>
+{% if registration is not defined %}
+<a href="{{ url_for('route_registration') }}">Sign UP</a>
+{% endif %}
+</body>
+</html>

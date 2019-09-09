@@ -24,7 +24,6 @@ a:visited {
     position: relative;
     top: 20px;
     right: 15%;
-    color: white;
     padding: 6px 11px;
     background-color: white;
 
@@ -56,4 +55,21 @@ table {
 
 tr:hover {
     background-color: #f0f0f0;
+}
+
+
+input[type = "text"] {
+    border-radius: 8px;
+    border: 0.7px solid black;
+    outline: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+
+}
+
+select{
+    border-radius: 8px;
+    outline: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
 }

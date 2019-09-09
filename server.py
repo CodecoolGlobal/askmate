@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_handler
 import util
-
+from security import hash_password,verify_password
+from datetime import datetime
 app = Flask(__name__)
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/home", methods=["GET", "POST"])
 def route_index():
     questions = data_handler.get_latest_five_questions()
     return render_template("index.html", questions=questions)
@@ -143,7 +144,7 @@ def route_answer_vote_down(answer_id):
 def route_search():
     search_phrase = request.args.get('q')
     search_results = data_handler.search(search_phrase)
-    return render_template('list.html', questions=search_results, )
+    return render_template('list.html', questions=search_results)
 
 
 @app.route("/answer/<answer_id>/new-comment", methods=["GET", "POST"])
@@ -173,8 +174,8 @@ def route_edit_comment(comment_id):
             question_id = data_handler.get_data_by_id(comment_id, "comment")[0]["question_id"]
         else:
             question_id = \
-            data_handler.get_data_by_id(str(data_handler.get_data_by_id(comment_id, "comment")[0]["answer_id"]),
-                                        "answer")[0]["question_id"]
+                data_handler.get_data_by_id(str(data_handler.get_data_by_id(comment_id, "comment")[0]["answer_id"]),
+                                            "answer")[0]["question_id"]
 
         return redirect(url_for("route_question", question_id=question_id))
 
@@ -200,9 +201,43 @@ def route_edit_answer(answer_id):
 
     return redirect(url_for("route_question", question_id=question_id))
 
+@app.route("/registration", methods=["GET", "POST"])
+def route_registration():
+    if request.method == 'POST':
+
+        username = request.form.get('username')
+        if data_handler.get_data_by_username(username):
+            return render_template('login.html',usernametaken = True,registration=True)
+        password = hash_password(request.form.get('password'))
+        registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        data_handler.add_new_user(username,password,registration_date)
+        return redirect(url_for('route_login'))
+    return render_template('login.html',registration=True)
+
+@app.route("/", methods=["GET", "POST"])
+def _():
+    return redirect(url_for('route_login'))
+
+@app.route("/login", methods=["GET", "POST"])
+def route_login():
+    if request.method == "POST":
+        username = request.form.get('username')
+        password_to_verify = request.form.get('password')
+        user_data = data_handler.get_data_by_username(username)
+        if not user_data:
+            return render_template('login.html',usernotfound=True)
+        verified = verify_password(password_to_verify,user_data[0]["password"])
+        if verified:
+            return redirect(url_for('route_index'))
+        else:
+            return render_template('login.html',wrongpassword=True)
+
+    return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run(
         port=5000,
         debug=True,
+        host='10.44.12.70'
     )

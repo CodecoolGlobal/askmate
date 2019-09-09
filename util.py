@@ -13,9 +13,6 @@ OPTIONS = {
 def replace_values(data):
     data = dict(data)
     for column in data:
-        print(column)
-        print(data[column])
-        print(type(data[column]))
         data[column] = data[column].replace("'", "''")
     if "image" in data:
         data["image"] = str(data["image"]).replace("", "")
@@ -23,6 +20,5 @@ def replace_values(data):
 
 
 def add_current_time(data):
-    print(data)
     data['submission_time'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return data
