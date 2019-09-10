@@ -1,4 +1,3 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask import Flask, render_template, request, redirect, url_for, session, escape, make_response
 import data_handler
 import util
@@ -258,16 +257,11 @@ def route_profile():
 
 @app.route('/list_user_info')
 def route_list_user_info():
-    users_data = data_handler.get_all_data('juzer')
+    users_data = data_handler.get_all_data('public.user')
     print(users_data)
     return render_template('user_list_attributes.html', users_data=users_data)
 
-@app.route('/set-cookie')
-def cookie_insertion():
-    redirect_to_index = redirect('/')
-    response = make_response(redirect_to_index)
-    response.set_cookie('cookie-name', value='values')
-    return response
+
 
 
 

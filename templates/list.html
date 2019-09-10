@@ -60,25 +60,8 @@
     </table>
     </div>
 {% endblock %}
-            <td align="center">
-                {{ q["view_number"] }}
-
-            </td>
-            <td align="center">
-                {{ q["vote_number"] }}
-            </td>
-            <td>
-                <a href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a>
-                <br>
-                <div class="submission_time">{{ q["submission_time"] }}</div>
-
-            </td>
 
 
-        </tr>
-    {% endfor %}
-
-</table>
 <a class="button" href="{{ url_for("route_list_user_info") }}">List Users </a>
 
 </body>

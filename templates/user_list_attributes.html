@@ -1,34 +1,35 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title> List of users and their attributes</title>
-
-</head>
-
-<body>
-<div class="users_info">
-    <table>
-        <th>ID</th>
-        <th>User Name</th>
-        <th>Registration Date</th>
-        {% for user in users_data %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.registration_date }}</td>
-            </tr>
+{% extends 'layout.html' %}
 
 
+{% block header %}
+
+  <title> {% block title%}List of users and their attributes {% endblock %}</title>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="users_info">
+        <table>
+            <th>ID</th>
+            <th>User Name</th>
+            <th>Registration Date</th>
+            {% for user in users_data %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.registration_date }}</td>
+                </tr>
 
 
-        {% endfor %}
 
-    </table>
 
-</div>
+            {% endfor %}
 
-</body>
+        </table>
 
-</html>
+    </div>
+
+{% endblock %}
+
