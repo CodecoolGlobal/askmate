@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add New Question</title>
-    <link href="{{ url_for("static",filename="question.css") }}" type="text/css" rel="stylesheet"/>
+{% extends "layout.html" %}
 
-</head>
-<body>
+{% block header %}
+    <title>{% block title %}Add Question{% endblock %}</title>
+    <link href="{{ url_for("static",filename="question.css") }}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
 
 {% if question %}
 <form action="/question/<question_id>/edit" method="POST" autocomplete="off">
@@ -25,5 +25,4 @@
 </form>
 <button class="not_button"><a style="text-decoration: none;color:black;" href="/list">Back</a></button>
 
-</body>
-</html>
+{% endblock %}

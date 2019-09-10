@@ -137,11 +137,11 @@ def get_comments_by_question(cursor, question):
 @connection.connection_handler
 def add_new_user(cursor,username,password,registration_date):
     cursor.execute(
-        """INSERT INTO juzer (username,password,registration_date)
+        """INSERT INTO public.user (username,password,registration_date)
         VALUES (%(username)s,%(password)s,%(registration_date)s);""",{'username':username,'password':password,'registration_date':registration_date})
 
 @connection.connection_handler
 def get_data_by_username(cursor, username):
-    cursor.execute("""SELECT * FROM juzer WHERE username = %(username)s;""",{"username":username})
+    cursor.execute("""SELECT * FROM public.user WHERE username = %(username)s;""",{"username":username})
     data = cursor.fetchall()
     return data

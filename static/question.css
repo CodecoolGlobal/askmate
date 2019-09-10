@@ -1,19 +1,17 @@
-body {
-    font-family: sans-serif;
-}
 
-a{
+.atag{
     text-decoration: none;
     color: black;
     font-weight: bold;
 }
 
-a:visited {
+.atag:visited {
     color: black;
 }
 
-a:hover {
+.atag:hover {
     color: #7a7a7a;
+    text-decoration: none;
 }
 
 .submission_time {
@@ -27,7 +25,6 @@ a:hover {
     top: 30%;
     margin-left: 70%;
 }
-
 .message {
     margin: auto 10%;
 }
@@ -36,26 +33,21 @@ a:hover {
 
     margin-top: 50px;
 }
-
-
 .comment{
     position: relative;
     left: 30px;
 color: #393939;
 font-size: 15px;
 }
-
 .not_button {
   background: none!important;
   border: none;
   padding: 0!important;
-  font-family: arial, sans-serif;
   color: black;
     font-weight: bold;
   cursor: pointer;
     font-size: 16px;
 }
-
 .not_button:hover {
     color: #7a7a7a;
 }

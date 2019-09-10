@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Ask Mate</title>
-    <link href="{{ url_for("static",filename="style.css") }}" type="text/css" rel="stylesheet"/>
-</head>
-<body>
+{% extends "layout.html" %}
 
-<a class="button" href={{ url_for("route_add_question") }}>Add new question</a>
-<div class="container">
-    {% if searched %}
-    <form action="{{ url_for ('route_search') }}" method="GET">
-    {% else %}
-    <form action="{{ url_for ('route_list') }}" method="GET">
-    {% endif %}
+{% block header %}
+    <title>{% block title %}Questions{% endblock %}</title>
+    <link href="{{ url_for("static",filename="style.css") }}" type="text/css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% if searched %}
+            <form action="{{ url_for ('route_search') }}" method="GET">
+        {% else %}
+            <form action="{{ url_for ('route_list') }}" method="GET">
+        {% endif %}
         <select name="ordered_by">
             {% for s_option in s_options %}
                 <option value="{{ s_option }}" {{ "selected" if selected_s_option==s_option }}>{{ s_option }}</option>
@@ -25,37 +25,38 @@
             {% endfor %}
         </select>
         <button type="submit">Sort</button>
-    </form>
-    <form action="{{ url_for('route_search') }}" method="GET" autocomplete="off">
-        <input type="text" name="q" placeholder="search..." required>
-        <button type="submit">Search</button>
-    </form>
-</div>
+        </form>
 
-<table>
-    <th>Views</th>
-    <th>Votes</th>
-    {% for q in questions %}
+        <form action="{{ url_for('route_search') }}" class="form-inline ml-auto" method="GET" autocomplete="off">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input name="q" type="text" class="form-control" placeholder="Search">
+            </div>
+        </form>
 
-        <tr>
+    </div>
+<div class="tablecontainer">
+    <table class="table table-hover table-dark table-sm">
+        <thead>
 
-            <td align="center">
-                {{ q["view_number"] }}
+                <th class="w-2 text-center" scope="col">Views</th>
+                <th class="w-2 text-center" scope="col">Votes</th>
+                <th class="w-2 text-center" scope="col">Questions</th>
+            </thead>
+            <tbody>
+            {% for q in questions %}
+            <tr>
+                <td class="text-center">{{ q["view_number"] }}</td>
 
-            </td>
-            <td align="center">
-                {{ q["vote_number"] }}
-            </td>
-            <td>
-                <a href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a>
-                <br>
-                <div class="submission_time">{{ q["submission_time"] }}</div>
-
-            </td>
-
-
-        </tr>
-    {% endfor %}
-</table>
-</body>
-</html>
+                <td class="text-center">{{ q["vote_number"] }}</td>
+                <td>
+                    <a class="question"
+                       href={{ url_for('route_question', question_id=q.id) }}> {{ q["title"] }} </a><br>
+                    <div class="submission_time">{{ q["submission_time"] }}</div>
+                </td>
+            </tr>
+            </tbody>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}
