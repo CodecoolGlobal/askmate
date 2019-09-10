@@ -40,8 +40,6 @@ def route_question(question_id):
         question["view_number"] = int(question["view_number"]) + 1
         data_handler.edit_row('question', question)
 
-    next_answer_id = data_handler.get_next_id("answer")
-    next_comment_id = data_handler.get_next_id("comment")
 
     answer_id_for_comment = request.args.get("answer_id")
     comment_to_question = request.args.get("comment_to_question")
@@ -54,13 +52,12 @@ def route_question(question_id):
     else:
         answer_to_edit = {}
     comment_to_edit = dict(request.form)
-
-    if username in cookies:
+    if 'username' in request.cookies:
         username = request.cookies.get('username')
         user_data = data_handler.get_data_by_username(username)[0]
 
-    return render_template("question.html", question=question, answers=answers, next_answer_id=str(next_answer_id),
-                           comments=comments, answer_id=answer_id_for_comment, next_comment_id=next_comment_id,
+    return render_template("question.html", question=question, answers=answers,
+                           comments=comments, answer_id=answer_id_for_comment,
                            comment_to_question=comment_to_question, comment_to_edit=comment_to_edit,
                            answer_to_edit=answer_to_edit,user_data=user_data)
 
@@ -69,10 +66,10 @@ def route_question(question_id):
 def route_add_question():
     if request.method == "POST":
         data_handler.add_new_row_to_table(request.form, "question")
-        return redirect(url_for("route_question", question_id=request.form.get("id")))
-    id = data_handler.get_next_id("question")
+        question_id = data_handler.get_all_data("question")[-1]['id']
+        return redirect(url_for("route_question", question_id=question_id))
     empty_question = {}
-    return render_template("add-question.html", id=str(id), question=empty_question)
+    return render_template("add-question.html", question=empty_question)
 
 
 @app.route("/question/<question_id>/new-answer", methods=["GET", "POST"])
@@ -215,12 +212,13 @@ def route_registration():
 
         username = request.form.get('username')
         if data_handler.get_data_by_username(username):
-            return render_template('login.html', usernametaken=True, registration=True)
+            return render_template('signup.html', usernametaken=True, registration=True)
         password = hash_password(request.form.get('password'))
         registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data_handler.add_new_user(username, password, registration_date)
-        return redirect(url_for('route_login'))
-    return render_template('login.html', registration=True)
+        return redirect(url_for('route_list'))
+
+    return render_template('signup.html', registration=True)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -231,7 +229,7 @@ def route_login():
         password_to_verify = request.form.get('password')
         user_data = data_handler.get_data_by_username(username)
         if not user_data:
-            return render_template('login.html', usernotfound=True)
+            return render_template('signup.html', usernotfound=True)
         verified = verify_password(password_to_verify, user_data[0]["password"])
         if verified:
             session['user_id'] = user_data[0]["id"]
@@ -239,9 +237,9 @@ def route_login():
 
             return redirect(url_for('cookie_insertion',username=username))
         else:
-            return render_template('login.html', wrongpassword=True)
+            return render_template('signup.html', wrongpassword=True)
 
-    return render_template('login.html')
+    return render_template('signup.html')
 
 @app.route('/logout')
 def route_logout():
@@ -254,8 +252,8 @@ def route_logout():
 def cookie_insertion(username):
     redirect_to_index =redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
-    g.user_id = session['user_id']
-    g.username = session['username']
+    user_id = str(data_handler.get_data_by_username(username)[0]["id"])
+    response.set_cookie('user_id', user_id)
     response.set_cookie('username', username)
     return response
 

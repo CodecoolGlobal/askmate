@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ 'Registration' }}</title>
+    <script>
+        function check() {
+            if (document.getElementById('password').value ==
+                document.getElementById('confirm_password').value) {
+                document.getElementById('message').style.color = 'green';
+
+                document.getElementById('message').innerHTML = 'matching';
+                document.getElementById('submit').disabled = false;
+            } else {
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').innerHTML = 'not matching';
+                document.getElementById('submit').disabled = true;
+
+
+            }
+        }
+    </script>
+</head>
+<body>
+<h1> {{ 'Registration' }}</h1>
+
+<h6>{{ 'User name taken' if usernametaken is defined }}</h6>
+<h6>{{ 'Wrong Password' if wrongpassword is defined }}</h6>
+<h6>{{ 'User name not found' if usernotfound is defined }}</h6>
+
+
+<form action="{{ url_for('route_registration') }}" method="post">
+    <label for="username"><h4>User name:</h4></label>
+    <input id="username" name="username" type="text" minlength="5" maxlength="16" autocomplete="off" required>
+    <label for="password"><h4>Password:</h4></label>
+    <input id="password" name="password" type="password" minlength="5" maxlength="24" onkeyup='check();' required>
+    <label for="password"><h4>Confirm Password:</h4></label>
+    <input type="password" name="confirm_password" id="confirm_password" onkeyup='check();'/>
+    <span id='message'></span>
+    <input id="submit" type="submit" value="Registration" disabled>
+</form>
+
+<a href="{{ url_for('route_list') }}">Back</a>
+
+</body>
+</html>

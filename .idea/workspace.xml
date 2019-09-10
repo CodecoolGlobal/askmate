@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d544d0d-68ad-4a90-aff0-f4e8fd6143e0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/askmate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/askmate.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/connection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user_list_attributes.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user_list_attributes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/add-question.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add-question.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/question.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user_page.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -195,6 +201,7 @@
       <workItem from="1568098890098" duration="4364000" />
       <workItem from="1567966671515" duration="7410000" />
       <workItem from="1568107161480" duration="2586000" />
+      <workItem from="1568111928722" duration="10441000" />
     </task>
     <task id="LOCAL-00001" summary="added users page">
       <created>1568109059449</created>
@@ -236,10 +243,9 @@
     <option name="LAST_COMMIT_MESSAGE" value="added users page" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/askmate$server.coverage" NAME="server Coverage Results" MODIFIED="1568107996261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/askmate$server.coverage" NAME="server Coverage Results" MODIFIED="1568114301620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/askmate$connection.coverage" NAME="connection Coverage Results" MODIFIED="1566891293179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/askmate$askmate.coverage" NAME="askmate Coverage Results" MODIFIED="1566222533829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/askmate$server.coverage" NAME="server Coverage Results" MODIFIED="1568104469431" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="masterDetails">
     <states>

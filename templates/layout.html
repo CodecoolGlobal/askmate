@@ -28,12 +28,32 @@
                 <a class="nav-link" href="{{ url_for('route_list_user_info') }}"><i class="fa fa-users"></i> Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for("route_add_question") }}"><i class="fa fa-plus-square"></i> Add Question</a>
+                <a class="nav-link" href="{{ url_for("route_add_question") }}"><i class="fa fa-plus-square"></i> Add
+                    Question</a>
             </li>
         </ul>
         {% block search %}{% endblock %}
-        <div class="logout">
-            <a href="{{url_for('route_logout')}}" class="btn btn-outline-danger my-2 my-sm-0" ><i class="fa fa-sign-out"></i> Log out</a>
+        <div>
+            <form class="form-inline mr-sm-4"
+                  action="{{url_for('route_login')}}"
+                  method="post" autocomplete="off">
+                <label for="email" class="text-muted my-2 my-sm-0 p-2">Username: </label>
+                <input type="email" class="form-control my-2 my-sm-0" id="email">
+                <label for="pwd" class="text-muted my-2 my-sm-0 p-2">Password: </label>
+                <input type="password" class="form-control my-2 my-sm-0" id="pwd">
+                <div class="pl-2">
+                    <button type="submit" class="btn btn-outline-success my-0 my-sm-0">Log in</button>
+                </div>
+                <div class="pl-2"><a class="btn btn-outline-primary my-2 my-sm-0" href="{{ url_for('route_registration') }}"> Sign
+                    Up </a>
+                </div>
+            </form>
+
+
+        </div>
+        <div class="logout animated hinge infinite">
+            <a href="{{ url_for('route_logout') }}" class="btn btn-outline-danger my-2 my-sm-0"><i
+                    class="fa fa-sign-out"></i> Log out</a>
         </div>
     </div>
 </nav>
