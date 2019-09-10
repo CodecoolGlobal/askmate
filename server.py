@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response, session, g
 import data_handler
 import util
 from security import hash_password, verify_password
@@ -54,10 +54,15 @@ def route_question(question_id):
     else:
         answer_to_edit = {}
     comment_to_edit = dict(request.form)
+
+    if username in cookies:
+        username = request.cookies.get('username')
+        user_data = data_handler.get_data_by_username(username)[0]
+
     return render_template("question.html", question=question, answers=answers, next_answer_id=str(next_answer_id),
                            comments=comments, answer_id=answer_id_for_comment, next_comment_id=next_comment_id,
                            comment_to_question=comment_to_question, comment_to_edit=comment_to_edit,
-                           answer_to_edit=answer_to_edit)
+                           answer_to_edit=answer_to_edit,user_data=user_data)
 
 
 @app.route("/add-question", methods=["GET", "POST"])
@@ -229,6 +234,9 @@ def route_login():
             return render_template('login.html', usernotfound=True)
         verified = verify_password(password_to_verify, user_data[0]["password"])
         if verified:
+            session['user_id'] = user_data[0]["id"]
+            session['username'] = request.form.get('username')
+
             return redirect(url_for('cookie_insertion',username=username))
         else:
             return render_template('login.html', wrongpassword=True)
@@ -246,6 +254,8 @@ def route_logout():
 def cookie_insertion(username):
     redirect_to_index =redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
+    g.user_id = session['user_id']
+    g.username = session['username']
     response.set_cookie('username', username)
     return response
 

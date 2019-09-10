@@ -21,6 +21,7 @@
     <input name=title placeholder="Title..." type="text" minlength="5" maxlength="50" value="{{ question.title }}"required>
     <br><textarea name=message placeholder="Your question..."  cols="60" rows="6" required>{{ question.message }}</textarea>
     <br><input name=image type="text" placeholder="Image link..." value="{{ question.image }}">
+    <input type="hidden" name="user_id" value="{{ user_data.id }}">
     <br><button class="not_button" type="submit">{% if not question %}Ask {% else %} Edit {% endif %}</button>
 </form>
 <button class="not_button"><a style="text-decoration: none;color:black;" href="/list">Back</a></button>
