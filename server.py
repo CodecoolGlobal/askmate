@@ -217,7 +217,6 @@ def route_registration():
         return redirect(url_for('route_login'))
     return render_template('login.html', registration=True)
 
-
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
@@ -246,6 +245,8 @@ def route_logout():
 def cookie_insertion(username):
     redirect_to_index =redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
+    user_id = str(data_handler.get_data_by_username(username)[0]["id"])
+    response.set_cookie('user_id', user_id)
     response.set_cookie('username', username)
     return response
 
