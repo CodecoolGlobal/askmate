@@ -8,6 +8,7 @@
 
 <a class="button" href={{ url_for("route_add_question") }}>Add new question</a>
 <div class="container">
+
     {% if searched %}
     <form action="{{ url_for ('route_search') }}" method="GET">
     {% else %}
@@ -56,6 +57,9 @@
 
         </tr>
     {% endfor %}
+
 </table>
+<a class="button" href="{{ url_for("route_list_user_info") }}">List Users </a>
+
 </body>
 </html>
