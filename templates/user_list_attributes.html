@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% extends 'layout.html' %}
+
+
+{% block header %}
+
+  <title> {% block title%}List of users and their attributes {% endblock %}</title>
+
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1> Hey {{ cookie_for_user.username }}, these are the users in askmate at the moment.</h1>
+    </div>
+
+    <div class="table-dark table-striped">
+        <table>
+            <th>ID</th>
+            <th>User Name</th>
+            <th>Registration Date</th>
+            {% for user in users_data %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.registration_date }}</td>
+                </tr>
+
+
+
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+{% endblock %}
+
