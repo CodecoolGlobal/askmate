@@ -258,8 +258,10 @@ def route_profile():
 @app.route('/list_user_info')
 def route_list_user_info():
     users_data = data_handler.get_all_data('public.user')
-    print(users_data)
-    return render_template('user_list_attributes.html', users_data=users_data)
+    username = request.cookies.get('username')
+    cookie_for_user = data_handler.get_data_by_username(username)[0]
+
+    return render_template('user_list_attributes.html', users_data=users_data, cookie_for_user=cookie_for_user)
 
 
 
