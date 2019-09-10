@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ question["title"] }}</title>
+{% extends "layout.html" %}
+
+{% block header %}
+    <title>{% block title %}{{ question["title"] }}{% endblock %}</title>
     <link href="{{ url_for("static",filename="question.css") }}" type="text/css" rel="stylesheet"/>
 
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
 <h1>{{ question["title"] }}</h1>
 <div class="message">{{ question["message"] }}</div>
 
@@ -15,8 +16,8 @@
     {{ question["submission_time"] }}</div>
 
 <div class="container">
-    <br><a href="{{ url_for("route_edit", question_id=question["id"]) }}">Edit Question</a>
-    <a href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
+    <br><a class="atag" href="{{ url_for("route_edit", question_id=question["id"]) }}">Edit Question</a>
+    <a class="atag" href="{{ url_for("route_delete_question",question_id=question["id"]) }}">Delete Question</a>
 </div>
 
 <div class="comment">
@@ -30,7 +31,7 @@
                         <div class="submission_time">Commented: {{ comment["submission_time"] }}</div>
                     </td>
                     <td>
-                        <a href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
+                        <a class="atag" href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
                             Comment</a>
                     </td>
                     <td>
@@ -102,11 +103,11 @@ Views:
 
 
 <br>
-<a href="{{ url_for("route_question_vote_up", question_id = question["id"]) }}">▲</a>
-<a href="{{ url_for("route_question_vote_down", question_id = question["id"]) }}">▼</a>
+<a class="atag" href="{{ url_for("route_question_vote_up", question_id = question["id"]) }}">▲</a>
+<a class="atag" href="{{ url_for("route_question_vote_down", question_id = question["id"]) }}">▼</a>
 <br>
 
-<a href="/list">Back</a>
+<a class="atag" href="/list">Back</a>
 <div class="answer">
     <table>
         {% for answer in answers %}
@@ -114,8 +115,8 @@ Views:
                 <td>
                     {{ answer["message"] }}
                     <br>
-                    <a href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">▲</a>
-                    <a href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">▼</a>
+                    <a class="atag" href="{{ url_for("route_answer_vote_up", answer_id = answer["id"]) }}">▲</a>
+                    <a class="atag" href="{{ url_for("route_answer_vote_down", answer_id = answer["id"]) }}">▼</a>
                     <br>
                     <div class="submission_time">Answered: {{ answer["submission_time"] }}</div>
                     {% if answer["image"] %}
@@ -138,7 +139,7 @@ Views:
                                         </td>
 
                                         <td>
-                                            <a href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
+                                            <a class="atag" href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}">Delete
                                                 Comment</a>
                                         </td>
                                         <td>
@@ -204,7 +205,7 @@ Views:
                     {{ answer["vote_number"] }}
                 </td>
                 <td style="vertical-align: top">
-                    <a
+                    <a class="atag"
                             href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}">Delete Answer</a>
                 </td>
                 <td style="vertical-align: top">
@@ -237,5 +238,4 @@ Views:
         Answer {% endif %}</button>
     </form>
 </div>
-</body>
-</html>
+{% endblock %}

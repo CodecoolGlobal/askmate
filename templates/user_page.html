@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+
+{% block header %}
+    <title>{% block title %}Profile Page{% endblock %}</title>
+{% endblock %}
+
+{% block content %}
+
+
+<h1>HELLO {{ user_data.username }}</h1>
+
+{% endblock %}
