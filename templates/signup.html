@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ 'Registration' }}</title>
+{% extends 'layout.html' %}
+
+{% block title %}     <title>{{ 'Registration' }}</title>
+{% endblock %}
+{% block header %}
     <script>
         function check() {
             if (document.getElementById('password').value ==
@@ -20,27 +21,56 @@
             }
         }
     </script>
-</head>
-<body>
-<h1> {{ 'Registration' }}</h1>
+{% endblock %}
+
+{% block content %}
 
 <h6>{{ 'User name taken' if usernametaken is defined }}</h6>
 <h6>{{ 'Wrong Password' if wrongpassword is defined }}</h6>
 <h6>{{ 'User name not found' if usernotfound is defined }}</h6>
 
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-15"> Sign up for Askmate Account</h2>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <div class="card border-secondary">
+                        <div class="card-header">
+                            <h3 class="mb-0 my-2">Sign Up</h3>
+                        </div>
+                        <div class="card-body">
+                                <form action="{{ url_for('route_registration') }}" method="post" class="form" role="form">
+                                    <div class="form-group">
+                                        <label for="username"><h4>User name:</h4></label>
+                                        <input class='form-control' id="username" name="username" type="text" minlength="5" maxlength="16" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password"><h4>Password:</h4></label>
+                                        <input class="form-control"id="password" name="password" type="password" minlength="5" maxlength="24" onkeyup='check();' required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password"><h4>Confirm Password:</h4></label>
+                                        <input  class='form-control'placeholder="Confirm Password" type="password" name="confirm_password" id="confirm_password" onkeyup='check();'/>
+                                    </div>
+                                    <span id='message'></span>
+                                    <input id="submit" type="submit" value="Registration" class="btn btn-success btn-lg float-right >
+                                </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<form action="{{ url_for('route_registration') }}" method="post">
-    <label for="username"><h4>User name:</h4></label>
-    <input id="username" name="username" type="text" minlength="5" maxlength="16" autocomplete="off" required>
-    <label for="password"><h4>Password:</h4></label>
-    <input id="password" name="password" type="password" minlength="5" maxlength="24" onkeyup='check();' required>
-    <label for="password"><h4>Confirm Password:</h4></label>
-    <input type="password" name="confirm_password" id="confirm_password" onkeyup='check();'/>
-    <span id='message'></span>
-    <input id="submit" type="submit" value="Registration" disabled>
-</form>
 
-<a href="{{ url_for('route_list') }}">Back</a>
 
-</body>
-</html>
+
+
+
+
+<a href="{{ url_for('route_list') }}"></a>
+
+
+{% endblock %}

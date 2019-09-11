@@ -220,7 +220,11 @@ def route_registration():
 
     return render_template('signup.html', registration=True)
 
+<<<<<<< HEAD
+@app.route("/", methods=["GET", "POST"])
+=======
 
+>>>>>>> 7dde62ed6704cab29ddf59466ca560827836a1b3
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
     if request.method == "POST":
