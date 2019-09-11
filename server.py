@@ -13,7 +13,7 @@ def route_index():
     questions = data_handler.get_latest_five_questions()
     return render_template("index.html", questions=questions)
 
-
+@app.route("/", methods=["GET", "POST"])
 @app.route('/list', methods=["GET", "POST"])
 def route_list():
     search_options = data_handler.SEARCH_OPTIONS
@@ -148,7 +148,7 @@ def route_answer_vote_down(answer_id):
 def route_search():
     search_phrase = request.args.get('q')
     search_results = data_handler.search(search_phrase)
-    return render_template('list.html', questions=search_results)
+    return render_template('list.html', questions=search_results, search = True)
 
 
 @app.route("/answer/<answer_id>/new-comment", methods=["GET", "POST"])
@@ -221,7 +221,6 @@ def route_registration():
     return render_template('signup.html', registration=True)
 
 
-@app.route("/", methods=["GET", "POST"])
 @app.route("/login", methods=["GET", "POST"])
 def route_login():
     if request.method == "POST":
@@ -229,27 +228,33 @@ def route_login():
         password_to_verify = request.form.get('password')
         user_data = data_handler.get_data_by_username(username)
         if not user_data:
-            return render_template('signup.html', usernotfound=True)
+            response = make_response(redirect(url_for('route_list')))
+            response.set_cookie('usernotfound', "True")
+            return redirect(url_for('route_list'))
         verified = verify_password(password_to_verify, user_data[0]["password"])
         if verified:
-            session['user_id'] = user_data[0]["id"]
-            session['username'] = request.form.get('username')
-
             return redirect(url_for('cookie_insertion',username=username))
         else:
-            return render_template('signup.html', wrongpassword=True)
+            response = make_response(redirect(url_for('route_list')))
+            response.set_cookie('wrongpassword', "True")
+            return redirect(url_for('route_list'))
 
     return render_template('signup.html')
 
 @app.route('/logout')
 def route_logout():
-    redirect_to_index = redirect(url_for('route_login'))
+    redirect_to_index = redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
     response.set_cookie('username', expires=0)
     return response
 
 @app.route('/set-cookie/<username>')
 def cookie_insertion(username):
+    if 'wrongpassword' in request.cookies:
+        request.cookies.pop('wrongpassword')
+    if 'usernotfound' in request.cookies:
+        request.cookies.pop('usernotfound')
+
     redirect_to_index =redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
     user_id = str(data_handler.get_data_by_username(username)[0]["id"])

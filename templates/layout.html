@@ -7,22 +7,20 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     {% block header %}{% endblock %}
 </head>
-<body>
+<body class="text-white" style="background-color: #212529">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="{{ url_for('route_list') }}">Askmate</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('route_profile') }}"><i class="fa fa-user"></i> Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('route_list') }}"><i class="fa fa-list-alt"></i> Questions</a>
+                <a class="nav-link" href="{{ url_for('route_list') }}"><i class="fa fa-th-list"></i> Questions</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('route_list_user_info') }}"><i class="fa fa-users"></i> Users</a>
@@ -32,25 +30,35 @@
                     Question</a>
             </li>
         </ul>
-        {% block search %}{% endblock %}
-        <div>
-            <form class="form-inline mr-sm-4"
-                  action="{{url_for('route_login')}}"
-                  method="post" autocomplete="off">
-                <label for="email" class="text-muted my-2 my-sm-0 p-2">Username: </label>
-                <input type="email" class="form-control my-2 my-sm-0" id="email">
-                <label for="pwd" class="text-muted my-2 my-sm-0 p-2">Password: </label>
-                <input type="password" class="form-control my-2 my-sm-0" id="pwd">
-                <div class="pl-2">
-                    <button type="submit" class="btn btn-outline-success my-0 my-sm-0">Log in</button>
-                </div>
-                <div class="pl-2"><a class="btn btn-outline-primary my-2 my-sm-0" href="{{ url_for('route_registration') }}"> Sign
-                    Up </a>
-                </div>
-            </form>
+        {% if 'username' not in request.cookies %}
+            <div>
+                <form class="form-inline mr-sm-4"
+                      action="{{ url_for('route_login') }}"
+                      method="post" autocomplete="off">
 
+                    <label for="username" class="text-muted my-2 my-sm-0 p-2">Username: </label>
+                    <input name="username" type="text" class="form-control my-2 my-sm-0" id="username">
+                    {% block usernotfound %}
+                    {% endblock %}
+                    <label for="pwd" class="text-muted my-2 my-sm-0 p-2">Password: </label>
+                    <input name=password type="password" class="form-control my-2 my-sm-0" id="pwd">
+                    {% block wrongpassword %}
+                    {% endblock %}
 
-        </div>
+                    <div class="pl-2">
+                        <button type="submit" class="btn btn-outline-success my-0 my-sm-0">Log in</button>
+                    </div>
+                    <div class="pl-2"><a class="btn btn-outline-primary my-2 my-sm-0"
+                                         href="{{ url_for('route_registration') }}"> Sign
+                        Up </a>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="pr-5"><p class="text-muted my-2 my-sm-0 p-2 h5">
+                Welcome {{ request.cookies.get('username') }}!</p>
+            </div>
+        {% endif %}
         <div class="logout animated hinge infinite">
             <a href="{{ url_for('route_logout') }}" class="btn btn-outline-danger my-2 my-sm-0"><i
                     class="fa fa-sign-out"></i> Log out</a>
