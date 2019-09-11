@@ -3,13 +3,80 @@
 
 {% block header %}
     <title>{% block title %}Profile Page{% endblock %}</title>
+
+    <style>
+        .collapsible {
+            background-color: #777;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #555;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f1f1f1;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+    <table style="background-color: #212529" class="table table-dark w-75">
+        <thead>
+        <tr>
+            <th class="w-25 text-center" scope="col">Date</th>
+            <th class="text-center" scope="col">Question</th>
+        </tr>
+        </thead>
 
-<table>
-<th>
+        <tbody>
+        {% for question in questions %}
+            <tr>
+                <td class="text-center">
+                    {{ question.submission_time }}
+                </td>
+                <td>
+                    <a href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!--
 
-</th>
-</table>
+    <button class="collapsible">Open Section 1</button>
+    <div class="content bg-dark text-light">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
+            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+            ea commodo consequat.</p>
+    </div>-->
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+
+
 {% endblock %}

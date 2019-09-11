@@ -229,15 +229,15 @@ def route_login():
         user_data = data_handler.get_data_by_username(username)
         if not user_data:
             response = make_response(redirect(url_for('route_list')))
-            response.set_cookie('usernotfound', "True")
-            return redirect(url_for('route_list'))
+            response.set_cookie('usernotfound', "True",expires=3)
+            return response
         verified = verify_password(password_to_verify, user_data[0]["password"])
         if verified:
             return redirect(url_for('cookie_insertion',username=username))
         else:
             response = make_response(redirect(url_for('route_list')))
-            response.set_cookie('wrongpassword', "True")
-            return redirect(url_for('route_list'))
+            response.set_cookie('wrongpassword', "True",expires=3)
+            return response
 
     return render_template('signup.html')
 
@@ -245,18 +245,25 @@ def route_login():
 def route_logout():
     redirect_to_index = redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
+    if 'wrongpassword' in request.cookies:
+        response.set_cookie('wrongpassword', expires=0)
+    if 'usernotfound' in request.cookies:
+        response.set_cookie('usernotfound', expires=0)
+
     response.set_cookie('username', expires=0)
+    response.set_cookie('user_id', expires=0)
+
     return response
 
 @app.route('/set-cookie/<username>')
 def cookie_insertion(username):
-    if 'wrongpassword' in request.cookies:
-        request.cookies.pop('wrongpassword')
-    if 'usernotfound' in request.cookies:
-        request.cookies.pop('usernotfound')
-
     redirect_to_index =redirect(url_for('route_list'))
     response = make_response(redirect_to_index)
+    if 'wrongpassword' in request.cookies:
+        response.set_cookie('wrongpassword', expires=0)
+    if 'usernotfound' in request.cookies:
+        response.set_cookie('usernotfound', expires=0)
+
     user_id = str(data_handler.get_data_by_username(username)[0]["id"])
     response.set_cookie('user_id', user_id)
     response.set_cookie('username', username)
@@ -266,7 +273,10 @@ def cookie_insertion(username):
 def route_profile():
     username = request.cookies.get('username')
     user_data = data_handler.get_data_by_username(username)[0]
-    return render_template('user_page.html',user_data=user_data)
+    questions_of_user = data_handler.get_user_activity_by_userid(user_data.get('id'),'question')
+    answers_of_user = data_handler.get_user_activity_by_userid(user_data.get('id'),'answer')
+    comments_of_user = data_handler.get_user_activity_by_userid(user_data.get('id'),'comment')
+    return render_template('user_page.html',user_data=user_data,questions = questions_of_user,answers = answers_of_user,comments=comments_of_user)
 
 @app.route('/list_user_info')
 def route_list_user_info():
@@ -275,8 +285,6 @@ def route_list_user_info():
     cookie_for_user = data_handler.get_data_by_username(username)[0]
 
     return render_template('user_list_attributes.html', users_data=users_data, cookie_for_user=cookie_for_user)
-
-
 
 
 

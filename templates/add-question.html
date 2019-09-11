@@ -13,7 +13,9 @@
 {% else %}
 <form action="/add-question" method="POST" autocomplete="off">
 {% endif %}
-
+    {% if question %}
+    <input name="id" type="hidden" value="{{ question.id }}">
+    {% endif %}
     <input name="submission_time" hidden="hidden" value="{{ '0 ' if not question else question.submission_time }}">
     <input name="view_number" hidden="hidden" value="{{ '0' if not question else question.view_number }}">
     <input name="vote_number" hidden="hidden" value="{{ '1' if not question else question.vote_number }}">
