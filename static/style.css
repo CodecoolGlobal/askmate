@@ -56,9 +56,9 @@ table {
 tr:hover {
     background-color: #f0f0f0;
 }
-*/
 
-input[type = "text"] {
+*/
+input[type = "text"],input[type="password"]{
     border-radius: 8px;
     border: 0.7px solid black;
     outline: none;
@@ -67,12 +67,12 @@ input[type = "text"] {
 
 }
 
-select{
+/*select{
     border-radius: 8px;
     outline: none;
     padding-top: 3px;
     padding-bottom: 3px;
-}
+}*/
 
 .has-search .form-control {
     padding-left: 2.375rem;
