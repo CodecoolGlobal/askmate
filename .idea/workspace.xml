@@ -2,8 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6d544d0d-68ad-4a90-aff0-f4e8fd6143e0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/askmate.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/askmate.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/connection.py" beforeDir="false" afterPath="$PROJECT_DIR$/connection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/data_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/templates/add-question.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/add-question.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/signup.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/question.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user_page.html" afterDir="false" />
+>>>>>>> 36f851342236a3c793ab5a03189f51f32b87a8cc
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -186,8 +198,17 @@
       <workItem from="1567949037651" duration="198000" />
       <workItem from="1567949520364" duration="1389000" />
       <workItem from="1567964044644" duration="775000" />
+      <workItem from="1567966671515" duration="13364000" />
+      <workItem from="1568032435067" duration="7402000" />
+      <workItem from="1568046376826" duration="3150000" />
+      <workItem from="1568098890098" duration="4364000" />
       <workItem from="1567966671515" duration="7410000" />
+<<<<<<< HEAD
       <workItem from="1568107161480" duration="9584000" />
+=======
+      <workItem from="1568107161480" duration="2586000" />
+      <workItem from="1568111928722" duration="10441000" />
+>>>>>>> 36f851342236a3c793ab5a03189f51f32b87a8cc
     </task>
     <task id="LOCAL-00001" summary="added users page">
       <created>1568109059449</created>
@@ -237,9 +258,13 @@
     <option name="LAST_COMMIT_MESSAGE" value="added nice title for user on user_list" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/askmate$server.coverage" NAME="server Coverage Results" MODIFIED="1568114301620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/askmate$connection.coverage" NAME="connection Coverage Results" MODIFIED="1566891293179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/askmate$askmate.coverage" NAME="askmate Coverage Results" MODIFIED="1566222533829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <SUITE FILE_PATH="coverage/askmate$server.coverage" NAME="server Coverage Results" MODIFIED="1568122969873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+=======
+>>>>>>> 36f851342236a3c793ab5a03189f51f32b87a8cc
   </component>
   <component name="masterDetails">
     <states>

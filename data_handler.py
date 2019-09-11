@@ -145,3 +145,11 @@ def get_data_by_username(cursor, username):
     cursor.execute("""SELECT * FROM "user" WHERE username = %(username)s;""",{"username":username})
     data = cursor.fetchall()
     return data
+
+@connection.connection_handler
+def get_user_activity_by_userid(cursor, id,table):
+    cursor.execute("""
+    SELECT * FROM %(table)s WHERE user_id = %(user_id)s
+    """,{'table':table,'user_id':id})
+    data = cursor.fetchall()
+    return data

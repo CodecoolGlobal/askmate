@@ -15,5 +15,6 @@
 pyvenv.cfg
 .venv
 pip-selfcheck.json
-
+connection.py
+.idea
 # End of https://www.gitignore.io/api/venv
