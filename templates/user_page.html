@@ -31,6 +31,7 @@
 {% endblock %}
 
 {% block content %}
+    <!--
     <table style="background-color: #212529" class="table table-dark w-75">
         <thead>
         <tr>
@@ -52,31 +53,52 @@
         {% endfor %}
         </tbody>
     </table>
-    <!--
 
-    <button class="collapsible">Open Section 1</button>
-    <div class="content bg-dark text-light">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat.</p>
-    </div>-->
-    <script>
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
+    {% for question in questions %}
+        {{ question.id }}
+        <div class="card">
+            <div class="card-body bg-light text-dark">
+                <h6 class="card-header text-muted">{{ question.submission_time }}</h6>
+                <h5 class="card-title"><a
+                        href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a></h5>
+                <button class="btn btn-info float-right" type="button" data-toggle="collapse"
+                        data-target="{{ question.submission_time }}"
+                        aria-expanded="false"
+                        aria-controls="{{ question.submission_time }}">
+                    <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="collapse" id="{{ question.submission_time }}">
+                    <p>Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample
+                        Sample </p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        -->
 
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
-                }
-            });
-        }
-    </script>
+    <div id="faq" role="tablist" aria-multiselectable="true">
+        {% for question in questions %}
 
+            <div class="card text-dark">
+                <div class="card-header" role="tab" id="q{{ question.id }}">
+                    <h6 class="card-header text-muted">{{ question.submission_time }}</h6>
+                    <h5 class="card-title">
+                        <a href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
+                    </h5>
+                    <a class="btn btn-info float-right" data-toggle="collapse" data-parent="#faq"
+                       href="#{{ question.id }}" aria-expanded="true"
+                       aria-controls="{{ question.id }}"><i class="fa fa-chevron-down"></i></a>
+
+                </div>
+                <div id="{{ question.id }}" class="collapse show" role="tabcard" aria-labelledby="q{{ question.id }}">
+                    <div class="card-body">
+                        Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample
+                        Sample
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 
 {% endblock %}

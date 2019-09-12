@@ -125,7 +125,7 @@ def get_latest_five_questions(cursor):
 def get_comments_by_question(cursor, question):
     answer_ids = [answer['id'] for answer in get_answers_by_qid(question['id'])]
     answer_ids_list = [f'answer_id={answer_id}' for answer_id in answer_ids]
-    columns = """id, question_id, answer_id, message, submission_time, CASE WHEN edited_count IS NULL THEN 0 ELSE edited_count END"""
+    columns = """id, question_id, answer_id, message, submission_time, CASE WHEN edited_count IS NULL THEN 0 ELSE edited_count END,user_id"""
     query = f"""SELECT {columns} FROM comment WHERE question_id = {question["id"]}"""
     if answer_ids:
         query += f" OR {' OR '.join((answer_ids_list))} ORDER BY submission_time DESC"

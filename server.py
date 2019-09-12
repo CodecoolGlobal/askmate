@@ -52,9 +52,11 @@ def route_question(question_id):
     else:
         answer_to_edit = {}
     comment_to_edit = dict(request.form)
+    user_data = {}
     if 'username' in request.cookies:
         username = request.cookies.get('username')
         user_data = data_handler.get_data_by_username(username)[0]
+
 
     return render_template("question.html", question=question, answers=answers,
                            comments=comments, answer_id=answer_id_for_comment,
@@ -64,6 +66,8 @@ def route_question(question_id):
 
 @app.route("/add-question", methods=["GET", "POST"])
 def route_add_question():
+    if 'username' not in request.cookies:
+        return redirect(url_for('route_list'))
     if request.method == "POST":
         data_handler.add_new_row_to_table(request.form, "question")
         question_id = data_handler.get_all_data("question")[-1]['id']
@@ -271,6 +275,8 @@ def cookie_insertion(username):
 
 @app.route('/profile')
 def route_profile():
+    if 'username' not in request.cookies:
+        return redirect(url_for('route_list'))
     username = request.cookies.get('username')
     user_data = data_handler.get_data_by_username(username)[0]
     questions_of_user = data_handler.get_user_activity_by_userid(user_data.get('id'),'question')
@@ -280,6 +286,8 @@ def route_profile():
 
 @app.route('/list_user_info')
 def route_list_user_info():
+    if 'username' not in request.cookies:
+        return redirect(url_for('route_list'))
     users_data = data_handler.get_all_data('public.user')
     username = request.cookies.get('username')
     cookie_for_user = data_handler.get_data_by_username(username)[0]

@@ -13,13 +13,14 @@
 
     <div class="submission_time"><br>Asked:
         {{ question["submission_time"] }}</div>
-
-    <div class="container">
-        <br><a class="btn btn-outline-warning" href="{{ url_for("route_edit", question_id=question["id"]) }}"><i
-            class="fa fa-scissors pr-2"></i>Edit Question</a>
-        <a class="btn btn-outline-danger" href="{{ url_for("route_delete_question",question_id=question["id"]) }}"><i
-                class="fa fa-trash-o pr-2"></i>Delete Question</a>
-    </div>
+    {% if request.cookies.get('user_id')|int == question["user_id"]|int %}
+        <div class="container">
+            <br><a class="btn btn-outline-warning" href="{{ url_for("route_edit", question_id=question["id"]) }}"><i class="fa fa-pencil pr-2"></i>Edit Question</a>
+            <a class="btn btn-outline-danger"
+               href="{{ url_for("route_delete_question",question_id=question["id"]) }}"><i
+                    class="fa fa-trash-o pr-2"></i>Delete Question</a>
+        </div>
+    {% endif %}
 
     <div class="comment">
         <table>
@@ -31,27 +32,30 @@
                             <br>
                             <div class="submission_time">Commented: {{ comment["submission_time"] }}</div>
                         </td>
-                        <td>
-                            <a class="btn btn-outline-danger"
-                               href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}"><i
-                                    class="fa fa-trash-o pr-2"></i>Delete
-                                Comment</a>
-                        </td>
-                        <td>
-                            <form action="{{ url_for('route_question',question_id=question["id"]) }}"
-                                  method="post">
-                                <input name="id" type="hidden" value="{{ comment.id }}">
-                                <input name="question_id" type="hidden" value="{{ comment.question_id }}">
-                                <input name="answer_id" type="hidden" value="{{ comment.answer_id }}">
-                                <input name="message" type="hidden" value="{{ comment.message }}">
-                                <input name="submission_time" type="hidden" value="{{ comment.submission_time }}">
-                                <input name="edited_count" type="hidden" value="{{ comment.edited_count }}">
-                                <button class="btn btn-outline-warning" type="submit"><i
-                                        class="fa fa-scissors pr-2"></i>Edit Comment
-                                </button>
-                            </form>
-                        </td>
+                        {% if request.cookies.get('user_id')|int == comment.user_id|int %}
+                            <td>
+                                <a class="btn btn-outline-danger"
+                                   href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}"><i
+                                        class="fa fa-trash-o pr-2"></i>Delete
+                                    Comment</a>
+                            </td>
+                        {% endif %}
 
+                        {% if request.cookies.get('user_id')|int == comment.user_id|int %}
+                            <td>
+                                <form action="{{ url_for('route_question',question_id=question["id"]) }}"
+                                      method="post">
+                                    <input name="id" type="hidden" value="{{ comment.id }}">
+                                    <input name="question_id" type="hidden" value="{{ comment.question_id }}">
+                                    <input name="answer_id" type="hidden" value="{{ comment.answer_id }}">
+                                    <input name="message" type="hidden" value="{{ comment.message }}">
+                                    <input name="submission_time" type="hidden" value="{{ comment.submission_time }}">
+                                    <input name="edited_count" type="hidden" value="{{ comment.edited_count }}">
+                                    <button class="btn btn-outline-warning" type="submit"><i class="fa fa-pencil pr-2"></i></i>Edit Comment
+                                    </button>
+                                </form>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endif %}
 
@@ -91,7 +95,8 @@
 
 <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
     <input name="comment_to_question" type="hidden" value="{{ question['id'] }}">
-    <button class="btn btn-outline-info" type="submit"><i class="fa fa-commenting-o pr-2"></i>
+    <button {{ 'disabled' if 'username' not in request.cookies }} class="btn btn-outline-info" type="submit"><i
+            class="fa fa-commenting-o pr-2"></i>
         Add Comment
     </button>
 </form>
@@ -140,23 +145,28 @@ Views:
                         <table>
                             {% for comment in comments %}
                                 {% if comment['answer_id']|int == answer['id']|int %}
-                                    <tr>
-                                        <td>
-                                            <div class="comment">{{ comment["message"] }}
-                                                Edited {{ comment['edited_count'] }} times
-                                            </div>
+                                <tr>
+                                    <td>
+                                        <div class="comment">{{ comment["message"] }}
+                                            Edited {{ comment['edited_count'] }} times
+                                        </div>
 
-                                            <br>
-                                            <div class="submission_time">
-                                                Commented: {{ comment["submission_time"] }}</div>
-                                        </td>
+                                        <br>
+                                        <div class="submission_time">
+                                            Commented: {{ comment["submission_time"] }}</div>
+                                    </td>
+
+                                    {% if request.cookies.get('user_id')|int ==  comment.user_id|int %}
 
                                         <td>
                                             <a class="btn btn-outline-danger"
                                                href="{{ url_for("route_delete_comment",comment_id=comment["id"]) }}"><i
-                                                    class="fa fa-trash-o pr-2"></i>Delete
+                            class="fa fa-trash-o pr-2"></i>Delete
                                                 Comment</a>
                                         </td>
+                                    {% endif %}
+                                    {% if request.cookies.get('user_id')|int ==  comment.user_id|int %}
+
                                         <td>
                                             <form action="{{ url_for('route_question',question_id=question["id"]) }}"
                                                   method="post">
@@ -169,13 +179,13 @@ Views:
                                                        value="{{ comment.submission_time }}">
                                                 <input name="edited_count" type="hidden"
                                                        value="{{ comment.edited_count }}">
-                                                <button class="btn btn-outline-warning" type="submit"><i
-                                                        class="fa fa-scissors pr-2"></i>Edit Comment
+                                                <button class="btn btn-outline-warning" type="submit"><i class="fa fa-pencil pr-2"></i>Edit Comment
                                                 </button>
                                             </form>
-
-                                    </tr>
-                                {% endif %}
+                                        </td>
+                                        {% endif %}
+                                        </tr>
+                                    {% endif %}
                             {% endfor %}
                         </table>
                     </div>
@@ -202,7 +212,7 @@ Views:
                            value="{{ '0 ' if not comment_to_edit else comment_to_edit.submission_time }}">
                     <input name="edited_count" type="hidden"
                            value="{{ 'NULL' if not comment_to_edit else comment_to_edit.edited_count }}">
-
+                    <input type="hidden" name="user_id" value="{{ request.cookies.get('user_id') }}">
                     <button class="btn btn-outline-info" type="submit"><i class="fa fa-commenting-o pr-2"></i>
                         {% if not comment_to_edit %}Post Comment {% else %}
                             Edit {% endif %}</button>
@@ -212,7 +222,9 @@ Views:
 
                     <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
                         <input name="answer_id" type="hidden" value="{{ answer['id'] }}">
-                        <button class="btn btn-outline-info" type="submit"><i class="fa fa-commenting-o pr-2"></i>Add
+                        <button {{ 'disabled' if 'username' not in request.cookies }} class="btn btn-outline-info"
+                                                                                      type="submit"><i
+                                class="fa fa-commenting-o pr-2"></i>Add
                             Comment
                         </button>
                     </form>
@@ -222,19 +234,25 @@ Views:
                     Votes:
                     {{ answer["vote_number"] }}
                 </td>
+                {% if request.cookies.get('user_id')|int ==  answer.user_id|int %}
+
                 <td style="vertical-align: top">
                     <form action="{{ url_for('route_question',question_id=question["id"]) }}" method="get">
                         <input name="answer_to_edit" type="hidden" value="{{ answer.id }}">
-                        <button class="btn btn-outline-warning" type="submit"><i class="fa fa-scissors pr-2"></i>Edit
+                        <button class="btn btn-outline-warning" type="submit"><i class="fa fa-pencil pr-2"></i>Edit
                             Answer
                         </button>
                     </form>
                 </td>
+            {% endif %}
+                {% if request.cookies.get('user_id')|int ==  answer.user_id|int %}
+
                 <td style="vertical-align: top">
                     <a class="btn btn-outline-danger"
                        href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}"><i
                             class="fa fa-trash-o pr-2"></i>Delete Answer</a>
                 </td>
+            {% endif %}
             </tr>
         {% endfor %}
     </table>
@@ -253,13 +271,16 @@ Views:
                value="{{ '1' if not answer_to_edit else answer_to_edit.vote_number }}">
         <input name="question_id" hidden="hidden"
                value="{{ question["id"] if not answer_to_edit else answer_to_edit.question_id }}">
-        <textarea class="form-control-feedback bg-dark text-white" name="message"
-                  placeholder="Answer the question pls..." cols="60" rows="6" minlength="5"
-                  required>{{ answer_to_edit.message }}</textarea>
+        <textarea {{ 'disabled' if 'username' not in request.cookies }} class="form-control-feedback bg-dark text-white"
+                                                                        name="message"
+                                                                        placeholder="Answer the question pls..."
+                                                                        cols="60" rows="6" minlength="5"
+                                                                        required>{{ answer_to_edit.message }}</textarea>
         <br><input type="text" name="image" placeholder="image url..." value="{{ answer_to_edit.image }}">
         <input name="user_id" type="hidden" value="{{ request.cookies.get("user_id") }}">
         <br>
-        <button class="btn btn-outline-info" type="submit"><i class="fa fa-comment pr-2"></i>
+        <button {{ 'disabled' if 'username' not in request.cookies }} class="btn btn-outline-info" type="submit"><i
+                class="fa fa-comment pr-2"></i>
             {% if not answer_to_edit %}Add Answer {% else %} Edit
                 Answer {% endif %}</button>
     </form>

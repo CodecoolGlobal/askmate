@@ -4,27 +4,71 @@
 {% block header %}
     <title>{% block title %}Add Question{% endblock %}</title>
     <link href="{{ url_for("static",filename="question.css") }}" type="text/css" rel="stylesheet"/>
+    <style>
+        textarea.textarea-autosize {
+            height: 2.25rem;
+            min-height: 2.25rem;
+            resize: none;
+            overflow-y: hidden;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
 
-{% if question %}
-<form action="/question/<question_id>/edit" method="POST" autocomplete="off">
-{% else %}
-<form action="/add-question" method="POST" autocomplete="off">
-{% endif %}
-    {% if question %}
-    <input name="id" type="hidden" value="{{ question.id }}">
-    {% endif %}
-    <input name="submission_time" hidden="hidden" value="{{ '0 ' if not question else question.submission_time }}">
-    <input name="view_number" hidden="hidden" value="{{ '0' if not question else question.view_number }}">
-    <input name="vote_number" hidden="hidden" value="{{ '1' if not question else question.vote_number }}">
-    <input name=title placeholder="Title..." type="text" minlength="5" maxlength="50" value="{{ question.title }}"required>
-    <br><textarea name=message placeholder="Your question..."  cols="60" rows="6" required>{{ question.message }}</textarea>
-    <br><input name=image type="text" placeholder="Image link..." value="{{ question.image }}">
-    <input type="hidden" name="user_id" value="{{ request.cookies.get("user_id") }}">
-    <br><button class="not_button" type="submit">{% if not question %}Ask {% else %} Edit {% endif %}</button>
-</form>
-<button class="not_button"><a style="text-decoration: none;color:black;" href="/list">Back</a></button>
+    <div class="row mx-auto justify-content-center">
+        <div class="col-md-10">
+            <div class="row text-dark">
+                <div class="col-md-6 mx-auto py-5">
+                    <div class="card border-secondary">
+                        <div class="card-header">
+                            <h3 class="text-center mb-0 my-2">Ask Your Question</h3>
+                        </div>
+                        <div class="card-body">
+                            {% if question %}
+                                <form action="/question/<question_id>/edit" method="POST" class="form" role="form"
+                                      autocomplete="off">
+                            {% else %}
+                                <form action="/add-question" method="POST" class="form" role="form" autocomplete="off">
+                            {% endif %}
+                            {% if question %}
+                                <input name="id" type="hidden" value="{{ question.id }}">
+                            {% endif %}
+                            <input name="submission_time" hidden="hidden"
+                                   value="{{ '0 ' if not question else question.submission_time }}">
+                            <input name="view_number" hidden="hidden"
+                                   value="{{ '0' if not question else question.view_number }}">
+                            <input name="vote_number" hidden="hidden"
+                                   value="{{ '1' if not question else question.vote_number }}">
+                            <div class="form-group">
+                                <label for="title"><h4>Title:</h4></label>
+                                <input class="form-control" id="title" name=title placeholder="Title"
+                                       type="text" minlength="5" maxlength="50" value="{{ question.title }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message"><h4>Question:</h4></label>
+                                <textarea class="form-control autosize" id="message" name="message"
+                                          placeholder="Your question" rows="10"
+                                          required>{{ question.message }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="image"><h4>Image Link:</h4></label>
+                            </div>
+                            <input class="form-control" id="image" name="image" type="text" placeholder="Image link"
+                                   value="{{ question.image }}">
+                            <input type="hidden" name="user_id" value="{{ request.cookies.get("user_id") }}">
+                            <div class="inline-group pt-3">
+                            <a class="btn btn-outline-info btn-sm" href="/list"><i class="fa fa-arrow-circle-left pr-2"></i>Back</a>
+                            <button class="btn btn-outline-success float-right btn-sm" type="submit">{% if not question %}Ask<i class="fa fa-share pl-2"></i>{% else %}
+                                Edit<i class="fa fa-pencil pl-2"></i>{% endif %}</button>
+                            </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
