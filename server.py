@@ -286,6 +286,24 @@ def route_list_user_info():
 
     return render_template('user_list_attributes.html', users_data=users_data, cookie_for_user=cookie_for_user)
 
+@app.route('/answer/<answer_id>/accept')
+def route_change_accept(answer_id):
+    answer = data_handler.get_data_by_id(answer_id, 'answer')[0]
+    accept = True
+    question_id = data_handler.get_data_by_id(answer_id, "answer")[0]["question_id"]
+    all_answers = data_handler.get_answers_by_qid(question_id)
+
+    rows_with_accept = data_handler.check_any_accept('answer', question_id)
+    print(rows_with_accept)
+
+    if rows_with_accept[0]['count'] == 0:
+        data_handler.update_answer_accept(answer['id'] , accept)
+    else:
+        print('question already answered')
+    return redirect(url_for('route_question', question_id=question_id))
+
+    return redirect(url_for('route_question', question_id=question_id))
+
 
 
 if __name__ == '__main__':

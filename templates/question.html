@@ -235,6 +235,12 @@ Views:
                        href="{{ url_for("route_delete_answer",answer_id = answer["id"]) }}"><i
                             class="fa fa-trash-o pr-2"></i>Delete Answer</a>
                 </td>
+                <td style="vertical-align: top">
+                    <a class="btn btn-outline-success"
+                        href="{{ url_for("route_change_accept", answer_id = answer['id']) }}"> Accept
+                    </a>
+                </td >
+
             </tr>
         {% endfor %}
     </table>

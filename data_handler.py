@@ -152,3 +152,16 @@ def get_user_activity_by_userid(cursor, id,table):
     cursor.execute(query)
     data = cursor.fetchall()
     return data
+
+@connection.connection_handler
+def update_answer_accept(cursor, id, accept):
+    if accept:
+        cursor.execute(f"""UPDATE answer SET accept = True WHERE id = {id}""")
+    if not accept:
+        cursor.execute(f"""UPDATE answer SET accept = False WHERE id = {id}""")
+
+@connection.connection_handler
+def check_any_accept(cursor, table, question_id):
+    cursor.execute("""SELECT COUNT(*) from answer WHERE accept = True and question_id = question_id""")
+    data = cursor.fetchall()
+    return data
