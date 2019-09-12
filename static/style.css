@@ -34,11 +34,7 @@ a.question,a.question:visited {
     background-color: #f1f1f1;
 }
 
-.container {
-    padding: 1em;
-    position: relative;
-    left: 60%;
-}
+
 .tablecontainer{
     margin: auto;
     width: 70%;
