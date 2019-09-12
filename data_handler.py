@@ -114,10 +114,10 @@ def search(cursor, search_phrase):
 
 
 @connection.connection_handler
-def get_latest_five_questions(cursor):
-    query = f'SELECT * FROM question ORDER BY submission_time DESC LIMIT 5'
+def get_users_latest_question(cursor,user_id):
+    query = f'SELECT * FROM question WHERE user_id ={user_id} ORDER BY submission_time DESC LIMIT 1'
     cursor.execute(query)
-    data = cursor.fetchall()
+    data = cursor.fetchall()[0]
     return data
 
 
@@ -161,7 +161,8 @@ def update_answer_accept(cursor, id, accept):
         cursor.execute(f"""UPDATE answer SET accept = False WHERE id = {id}""")
 
 @connection.connection_handler
-def check_any_accept(cursor, table, question_id):
-    cursor.execute("""SELECT COUNT(*) from answer WHERE accept = True and question_id = question_id""")
+def check_any_accept(cursor, question_id):
+    cursor.execute("""SELECT COUNT(*) from answer WHERE accept = True and question_id = %(question_id)s""",{'question_id':question_id})
     data = cursor.fetchall()
     return data
+

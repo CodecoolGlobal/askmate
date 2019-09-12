@@ -70,7 +70,7 @@ def route_add_question():
         return redirect(url_for('route_list'))
     if request.method == "POST":
         data_handler.add_new_row_to_table(request.form, "question")
-        question_id = data_handler.get_all_data("question")[-1]['id']
+        question_id = data_handler.get_users_latest_question(request.cookies.get('user_id'))['id']
         return redirect(url_for("route_question", question_id=question_id))
     empty_question = {}
     return render_template("add-question.html", question=empty_question)
@@ -220,7 +220,13 @@ def route_registration():
         password = hash_password(request.form.get('password'))
         registration_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         data_handler.add_new_user(username, password, registration_date)
-        return redirect(url_for('route_list'))
+
+        user_id = str(data_handler.get_data_by_username(username)[0]["id"])
+
+        response = make_response(redirect(url_for('route_list')))
+        response.set_cookie('user_id',user_id )
+        response.set_cookie('username', username)
+        return response
 
     return render_template('signup.html', registration=True)
 
@@ -299,7 +305,6 @@ def route_change_accept(answer_id):
     answer = data_handler.get_data_by_id(answer_id, 'answer')[0]
     accept = True
     question_id = data_handler.get_data_by_id(answer_id, "answer")[0]["question_id"]
-    all_answers = data_handler.get_answers_by_qid(question_id)
 
     rows_with_accept = data_handler.check_any_accept('answer', question_id)
     print(rows_with_accept)
@@ -309,8 +314,6 @@ def route_change_accept(answer_id):
     else:
         print('question already answered')
     return redirect(url_for('route_question', question_id=question_id))
-    return redirect(url_for('route_question', question_id=question_id))
-
 
 
 if __name__ == '__main__':

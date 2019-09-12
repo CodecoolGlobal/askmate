@@ -3,102 +3,65 @@
 
 {% block header %}
     <title>{% block title %}Profile Page{% endblock %}</title>
-
-    <style>
-        .collapsible {
-            background-color: #777;
-            color: white;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-        }
-
-        .active, .collapsible:hover {
-            background-color: #555;
-        }
-
-        .content {
-            padding: 0 18px;
-            display: none;
-            overflow: hidden;
-            background-color: #f1f1f1;
-        }
-    </style>
 {% endblock %}
 
 {% block content %}
-    <!--
-    <table style="background-color: #212529" class="table table-dark w-75">
-        <thead>
-        <tr>
-            <th class="w-25 text-center" scope="col">Date</th>
-            <th class="text-center" scope="col">Question</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for question in questions %}
-            <tr>
-                <td class="text-center">
-                    {{ question.submission_time }}
-                </td>
-                <td>
-                    <a href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    {% for question in questions %}
-        {{ question.id }}
-        <div class="card">
-            <div class="card-body bg-light text-dark">
-                <h6 class="card-header text-muted">{{ question.submission_time }}</h6>
-                <h5 class="card-title"><a
-                        href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a></h5>
-                <button class="btn btn-info float-right" type="button" data-toggle="collapse"
-                        data-target="{{ question.submission_time }}"
-                        aria-expanded="false"
-                        aria-controls="{{ question.submission_time }}">
-                    <i class="fa fa-chevron-down"></i>
-                </button>
-                <div class="collapse" id="{{ question.submission_time }}">
-                    <p>Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample
-                        Sample </p>
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-        -->
-
-    <div id="faq" role="tablist" aria-multiselectable="true">
+    <div class="accordion" id="accordionExample">
         {% for question in questions %}
 
-            <div class="card text-dark">
-                <div class="card-header" role="tab" id="q{{ question.id }}">
-                    <h6 class="card-header text-muted">{{ question.submission_time }}</h6>
-                    <h5 class="card-title">
-                        <a href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
-                    </h5>
-                    <a class="btn btn-info float-right" data-toggle="collapse" data-parent="#faq"
-                       href="#{{ question.id }}" aria-expanded="true"
-                       aria-controls="{{ question.id }}"><i class="fa fa-chevron-down"></i></a>
+            <div class="card w-50 mx-auto my-2">
+                <div class="card-header" id="heading{{ question.id }}">
+                    <p class="text-muted">{{ question.submission_time }}</p>
+                    <h4 class="card-title mb-0">
+                        <a class="text-dark text-decoration-none"
+                           href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
 
+                        <button class="btn btn-link float-right" type="button" data-toggle="collapse"
+                                data-target="#collapse{{ question.id }}" aria-expanded="true"
+                                aria-controls="collapse{{ question.id }}">
+                            <i class="fa fa-chevron-down text-dark"></i>
+                        </button>
+                    </h4>
                 </div>
-                <div id="{{ question.id }}" class="collapse show" role="tabcard" aria-labelledby="q{{ question.id }}">
-                    <div class="card-body">
-                        Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample Sample
-                        Sample
+
+                <div id="collapse{{ question.id }}" class="collapse " aria-labelledby="heading{{ question.id }}"
+                     data-parent="#accordionExample">
+                    <div class="card-body text-dark">
+                        {{ question.message }}
+                        <div class="accordion" id="accordionExample">
+                            {% for question in questions %}
+
+                                <div class="card w-50 mx-auto my-2">
+                                    <div class="card-header" id="heading{{ question.id }}">
+                                        <p class="text-muted">{{ question.submission_time }}</p>
+                                        <h4 class="card-title mb-0">
+                                            <a class="text-dark text-decoration-none"
+                                               href={{ url_for('route_question', question_id=question.id) }}> {{ question.title }} </a>
+
+                                            <button class="btn btn-link float-right" type="button"
+                                                    data-toggle="collapse"
+                                                    data-target="#collapse{{ question.id }}" aria-expanded="true"
+                                                    aria-controls="collapse{{ question.id }}">
+                                                <i class="fa fa-chevron-down text-dark"></i>
+                                            </button>
+                                        </h4>
+                                    </div>
+
+                                    <div id="collapse{{ question.id }}" class="collapse "
+                                         aria-labelledby="heading{{ question.id }}"
+                                         data-parent="#accordionExample">
+                                        <div class="card-body text-dark">
+                                            {{ question.message }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-
 
 {% endblock %}

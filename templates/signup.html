@@ -3,7 +3,7 @@
 
 {% block title %}Registration{% endblock %}
 {% block header %}
-<<<<<<< HEAD
+    <link href="{{ url_for("static",filename="signup.css") }}" type="text/css" rel="stylesheet"/>
     <script>
         function check() {
             if (document.getElementById('password').value ==
@@ -14,64 +14,31 @@
                 document.getElementById('submit').disabled = false;
             } else {
                 document.getElementById('message').style.color = 'red';
-                document.getElementById('message').innerHTML = 'not matching';
+                document.getElementById('message').innerHTML = 'Passwords are NOT matching';
                 document.getElementById('submit').disabled = true;
-
-
             }
         }
     </script>
-=======
-    <link href="{{ url_for("static",filename="signup.css") }}" type="text/css" rel="stylesheet"/>
-    <script>function check() {
-    if (document.getElementById('password').value ==
-        document.getElementById('confirm_password').value) {
-        document.getElementById('message').style.color = 'green';
-
-        document.getElementById('message').innerHTML = 'Passwords are matching';
-        document.getElementById('submit').disabled = false;
-    } else {
-        document.getElementById('message').style.color = 'red';
-        document.getElementById('message').innerHTML = 'Passwords are NOT matching';
-        document.getElementById('submit').disabled = true;
-    }
-}</script>
->>>>>>> 9a52d43e63d2c46548a76b4dc08aea10bbb3b186
 {% endblock %}
 
 {% block content %}
 
 
-<<<<<<< HEAD
+
 <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
-            <h2 class="text-center mb-15"> Sign up for Askmate Account</h2>
             <div class="row text-dark">
                 <div class="col-md-6 mx-auto">
                     <div class="card border-secondary">
                         <div class="card-header">
-                            <h3 class="mb-0 my-2">Sign Up</h3>
+                            <h3 class="mb-0 my-2">Sign up for Askmate Account</h3>
                         </div>
                         <div class="card-body">
                                 <form action="{{ url_for('route_registration') }}" method="post" class="form" role="form">
-=======
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row text-dark">
-                    <div class="col-md-6 mx-auto">
-                        <div class="card border-secondary">
-                            <div class="card-header">
-                                <h3 class="mb-0 my-2 text-center">Sign up for Askmate Account</h3>
-                            </div>
-                            <div class="card-body">
-                                <form action="{{ url_for('route_registration') }}" method="post" class="form"
-                                      role="form">
->>>>>>> 9a52d43e63d2c46548a76b4dc08aea10bbb3b186
                                     <div class="form-group">
-                                        <label for="username"><h4>User name:</h4></label>
-                                        <input class='form-control' id="username" name="username" type="text"
+                                        <label for="user_name"><h4>User name:</h4></label>
+                                        <input class='form-control' id="user_name" name="username" type="text"
                                                minlength="5" maxlength="16" placeholder="Username" autocomplete="off"
                                                required>
                                     </div>
@@ -91,7 +58,7 @@
                                                name="confirm_password" id="confirm_password" onkeyup='check();'/>
                                     </div>
                                     <span id='message'></span>
-                                    <button id="submit" type="submit" class="button btn-sm float-right"><span>Sign Up</span>
+                                    <button id="submit" type="submit" class="button float-right"><span>Sign Up</span>
                                     </button>
                                 </form>
                             </div>
